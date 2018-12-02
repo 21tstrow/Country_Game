@@ -1,3 +1,41 @@
+#Variable list:
+# -population_happiness
+# -military_might
+# -food_resource
+# -foreign_relations
+
+def display_values(VARIABLE):
+  if VARIABLE < 10:
+    VARIABLE_LEVEL = 1
+  elif VARIABLE < 20:
+    VARIABLE_LEVEL = 2
+  elif VARIABLE < 30:
+    VARIABLE_LEVEL = 3
+  elif VARIABLE < 40:
+    VARIABLE_LEVEL = 4
+  elif VARIABLE < 50:
+    VARIABLE_LEVEL = 5
+  elif VARIABLE < 60:
+    VARIABLE_LEVEL = 6    
+  elif VARIABLE < 70:
+    VARIABLE_LEVEL = 7
+  elif VARIABLE < 80:
+    VARIABLE_LEVEL = 8 
+  elif VARIABLE < 90:
+    VARIABLE_LEVEL = 9 
+  else:
+    VARIABLE_LEVEL = 10
+
+  variable_squares = ""
+  blank_squares = 10 - VARIABLE_LEVEL
+  while VARIABLE_LEVEL > 0:
+    variable_squares += "■ "
+    VARIABLE_LEVEL -= 1
+  while blank_squares > 0:
+    variable_squares += "□ "
+    blank_squares -= 1
+  variable_squares += "----> " + str(VARIABLE) + "%"
+  print variable_squares
 
 
 country_shape_small_compact = """
@@ -37,3 +75,26 @@ country_shape_big_long = """
 |                             |
  \___________________________/
 """
+
+
+
+population_happiness = 50
+military_might = 50
+food_resource = 50
+foreign_relations = 50
+
+population_happiness_str = "population_happiness"
+military_might_str = "military might"
+food_resource_str = "food resource"
+foreign_relations_str = "foreign_relations"
+
+stats = [population_happiness_str, population_happiness, military_might_str, military_might, food_resource_str, food_resource, foreign_relations_str, foreign_relations]
+
+for i in stats:
+  try:
+    if i == int(i):
+      display_values(i)
+      print " "
+  except ValueError:
+    print i
+
