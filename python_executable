@@ -1,0 +1,39 @@
+
+
+country_shape_small_compact = """
+  ________
+ /        \
+|   YOUR   |
+|  COUNTRY |
+ \________/
+"""
+
+country_shape_big_compact = """ 
+    ________________
+   /                \
+  /                  \
+ /                    \
+|         YOUR         |
+|        COUNTRY       |
+ \                    /
+  \                  /
+   \________________/
+"""
+
+country_shape_small_long = """ 
+  _________________
+ /      YOUR       \
+|      COUNTRY      |
+ \_________________/
+"""
+
+
+country_shape_big_long = """
+
+   _________________________
+  /                         \
+ /           YOUR            \
+|           COUNTRY           |
+|                             |
+ \___________________________/
+"""
