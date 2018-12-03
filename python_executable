@@ -3,6 +3,37 @@
 # -military_might
 # -food_resource
 # -foreign_relations
+  # -total_population
+  # -government wealth
+  # -resource diversity
+
+
+'''
+The game functions as follows:
+The higher a value, the lower the chance of a disaster in response to that event.
+A player can preform two options per "Year" turn
+
+Disaster list:
+Starvation -> Low food: population decreases, happiness decreases
+Invasion -> Low military might and bad foreign relations: country is seized by outsiders, GAME OVER
+Natural disaster -> Low resource diversity: population decreases, happiness decreases
+Coup -> Low population happiness, Low military might: country is seized, GAME OVER
+Devolution -> Low population: pop. is too low so country reverts to farming society. GAME OVER
+Ousted -> Democratic -> Low happiness: Voted out of office, GAME OVER
+Ousted -> Dictatorship -> Low foriegn relations and low population happiness: country "liberated", GAME OVER
+
+Options:
+Subsidise Farming -> decrease government wealth, increase food
+Take land -> decrease military might, increase resource diversity proportional to previous military might
+Import -> decrease food or government wealth, increase resource diversity or food
+Export -> decrease food or resource diversity, increase government wealth
+Take over country -> if military might is greater than neighbouring country, gain 25% to every category but lose % military might proportional to neighbouring country's military might vs. own
+Increase innovation -> decrease government wealth and food, increase resource diversity and population happiness
+
+'''
+
+
+
 
 def display_values(VARIABLE):
   if VARIABLE < 10:
@@ -97,4 +128,3 @@ for i in stats:
       print " "
   except ValueError:
     print i
-
