@@ -44,7 +44,64 @@ Hold festival -> decrease government wealth, increase population happiness
 Increase taxes -> decrease pop happiness, increase government wealth proportional to pop.
 '''
 
+user_econ = raw_input("Would you like a Capitalist or Communist government? Type here: ").lower()
+def spell_check_econ():
+  global user_econ
+  if user_econ != "capitalist" and user_econ != "communist":
+    print " "
+    print "Double check your spelling and try again."
+    user_econ = raw_input("Type here:")
+    print " "
+    spell_check_econ()
+spell_check_econ()
 
+print "What type of leadership do you want? Democracy or Dictatorship"
+user_govstyle = raw_input("Type here:").lower()
+def spell_check_govstyle():
+  global user_govstyle
+  if user_govstyle !=  "democracy" and user_govstyle != "dictatorship":
+    print " "
+    print "Double check your spelling and try again."
+    user_govstyle = raw_input("Type here: ")
+    print " "
+    spell_check_govstyle()
+spell_check_govstyle()
+
+if user_econ == "capitalist" and user_govstyle == "democracy":
+  population_happiness = 75
+  military_might = 40
+  food_resource = 50
+  foreign_relations = 30
+  total_population = 35
+  government_wealth = 10
+  resource_diversity = 50
+#290
+if user_econ == "capitalist" and user_govstyle == "dictatorship":
+  population_happiness = 30
+  military_might = 80
+  food_resource = 25
+  foreign_relations = 30
+  total_population = 35
+  government_wealth = 50
+  resource_diversity = 40
+
+if user_econ == "communist" and user_govstyle == "democracy":
+  population_happiness = 50
+  military_might = 50
+  food_resource = 25
+  foreign_relations = 50
+  total_population = 50
+  government_wealth = 50
+  resource_diversity = 15
+
+if user_econ == "communist" and user_govstyle == "dictatorship":
+  population_happiness = 20
+  military_might = 50
+  food_resource = 20
+  foreign_relations = 20
+  total_population = 80
+  government_wealth = 40
+  resource_diversity = 60
 
 
 def display_values(VARIABLE):
@@ -120,14 +177,9 @@ country_shape_big_long = """
 """
 
 
+options = ["subsidise farming", "take land", "import", "export", "take over country", "increase innovation", "accept immigrants", "gift", "deport citizens", "draft citizens", "hold festival", "increase taxes", "help"]
+ 
 
-population_happiness = 50
-military_might = 50
-food_resource = 50
-foreign_relations = 50
-total_population = 50
-government_wealth = 50
-resource_diversity = 50
 countries_left = 4
 
 population_happiness_str = "population happiness"
@@ -141,13 +193,73 @@ countries_left_str = "countries left: "
 
 stats = [population_happiness_str, population_happiness, military_might_str, military_might, food_resource_str, food_resource, foreign_relations_str, foreign_relations, total_population_str, total_population, government_wealth_str , government_wealth, resource_diversity_str, resource_diversity, countries_left_str, countries_left]
 
-for i in stats:
-  if i == countries_left_str or i is countries_left:
-    print str(i),
-  else:
-    try:
-      if i == int(i):
-        display_values(i)
-        print " "
-    except ValueError:
-      print i
+def display_stats():
+  for i in stats:
+    if i == countries_left_str or i is countries_left:
+      print str(i),
+    else:
+      try:
+        if i == int(i):
+          display_values(i)
+          print " "
+      except ValueError:
+        print i
+
+def option_choice():
+  print "What would you like to do? For a list of options, type \'help\'"
+  global user_option_choice
+  user_option_choice = raw_input("Type here: ").lower()
+  option_spellcheck()
+  option_compare()
+  
+def option_compare():
+  global user_option_choice
+  if user_option_choice = "subsidise farming":
+    subsidise_farming()
+  if user_option_choice = "take land":
+    take_land()
+  if user_option_choice = "import":
+   import_()
+  if user_option_choice = "export":
+    export()  
+  if user_option_choice = "take over country":
+    take_over_country()
+  if user_option_choice = "increase innovation":
+    increase_innovation()
+  if user_option_choice = "":
+    ()
+  if user_option_choice = "":
+    ()
+  if user_option_choice = "":
+    ()
+  if user_option_choice = "":
+    ()
+  if user_option_choice = "":
+    ()
+  if user_option_choice = "":
+    ()
+  if user_option_choice = "":
+    ()
+
+
+def option_spellcheck():
+  global user_option_choice
+  testcase = 1
+  for i in options:
+    if i == user_option_choice:
+      testcase = 0
+  if testcase == 1:
+    print "Double check your spelling and try again. For a list of options, type \'help\'"
+    user_option_choice = raw_input("Type here: ")
+
+
+
+
+
+def gameplay_overview():
+  print " "
+  print " "
+  display_stats()
+  option_choice()
+
+gameplay_overview()
