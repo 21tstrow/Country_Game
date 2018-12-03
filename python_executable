@@ -226,20 +226,20 @@ def option_compare():
     take_over_country()
   if user_option_choice = "increase innovation":
     increase_innovation()
-  if user_option_choice = "":
-    ()
-  if user_option_choice = "":
-    ()
-  if user_option_choice = "":
-    ()
-  if user_option_choice = "":
-    ()
-  if user_option_choice = "":
-    ()
-  if user_option_choice = "":
-    ()
-  if user_option_choice = "":
-    ()
+  if user_option_choice = "accept immigrants":
+    accept_immigrants()
+  if user_option_choice = "gift":
+    gift()
+  if user_option_choice = "deport citizens":
+    deport_citizens()
+  if user_option_choice = "draft citizens":
+    draft_citizens()
+  if user_option_choice = "hold festival":
+    hold_festival()
+  if user_option_choice = "increase taxes":
+    increase_taxes()
+  if user_option_choice = "help":
+    help_()
 
 
 def option_spellcheck():
