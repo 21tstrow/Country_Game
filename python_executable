@@ -214,33 +214,32 @@ def option_choice():
   
 def option_compare():
   global user_option_choice
-  if user_option_choice = "subsidise farming":
+  if user_option_choice == "subsidise farming":
     subsidise_farming()
-  if user_option_choice = "take land":
+  if user_option_choice == "take land":
     take_land()
-  if user_option_choice = "import":
+  if user_option_choice == "import":
    import_()
-  if user_option_choice = "export":
+  if user_option_choice == "export":
     export()  
-  if user_option_choice = "take over country":
+  if user_option_choice == "take over country":
     take_over_country()
-  if user_option_choice = "increase innovation":
+  if user_option_choice == "increase innovation":
     increase_innovation()
-  if user_option_choice = "accept immigrants":
+  if user_option_choice == "accept immigrants":
     accept_immigrants()
-  if user_option_choice = "gift":
+  if user_option_choice == "gift":
     gift()
-  if user_option_choice = "deport citizens":
+  if user_option_choice == "deport citizens":
     deport_citizens()
-  if user_option_choice = "draft citizens":
+  if user_option_choice == "draft citizens":
     draft_citizens()
-  if user_option_choice = "hold festival":
+  if user_option_choice == "hold festival":
     hold_festival()
-  if user_option_choice = "increase taxes":
+  if user_option_choice == "increase taxes":
     increase_taxes()
-  if user_option_choice = "help":
+  if user_option_choice == "help":
     help_()
-
 
 def option_spellcheck():
   global user_option_choice
@@ -251,6 +250,7 @@ def option_spellcheck():
   if testcase == 1:
     print "Double check your spelling and try again. For a list of options, type \'help\'"
     user_option_choice = raw_input("Type here: ")
+    option_spellcheck()
 
 
 
@@ -261,5 +261,6 @@ def gameplay_overview():
   print " "
   display_stats()
   option_choice()
+  
 
 gameplay_overview()
