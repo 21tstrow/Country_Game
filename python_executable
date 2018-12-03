@@ -3,12 +3,19 @@
 # -military_might
 # -food_resource
 # -foreign_relations
-  # -total_population
-  # -government wealth
-  # -resource diversity
+# -total_population
+# -government wealth
+# -resource diversity
+# -countries left
 
 
 '''
+Goal of the game: take over all neighbouring countries
+#of neighbouring countries -> easy 2, med 3, hard 4
+
+To begin game: User chooses capitalist or communist economy, then chooses democracy or dictatorship
+Initial stats change based on choice
+
 The game functions as follows:
 The higher a value, the lower the chance of a disaster in response to that event.
 A player can preform two options per "Year" turn
@@ -118,18 +125,29 @@ population_happiness = 50
 military_might = 50
 food_resource = 50
 foreign_relations = 50
+total_population = 50
+government_wealth = 50
+resource_diversity = 50
+countries_left = 4
 
-population_happiness_str = "population_happiness"
+population_happiness_str = "population happiness"
 military_might_str = "military might"
 food_resource_str = "food resource"
-foreign_relations_str = "foreign_relations"
+foreign_relations_str = "foreign relations"
+total_population_str = "total population"
+government_wealth_str = "government wealth"
+resource_diversity_str = "resource diversity"
+countries_left_str = "countries left: "
 
-stats = [population_happiness_str, population_happiness, military_might_str, military_might, food_resource_str, food_resource, foreign_relations_str, foreign_relations]
+stats = [population_happiness_str, population_happiness, military_might_str, military_might, food_resource_str, food_resource, foreign_relations_str, foreign_relations, total_population_str, total_population, government_wealth_str , government_wealth, resource_diversity_str, resource_diversity, countries_left_str, countries_left]
 
 for i in stats:
-  try:
-    if i == int(i):
-      display_values(i)
-      print " "
-  except ValueError:
-    print i
+  if i == countries_left_str or i is countries_left:
+    print str(i),
+  else:
+    try:
+      if i == int(i):
+        display_values(i)
+        print " "
+    except ValueError:
+      print i
