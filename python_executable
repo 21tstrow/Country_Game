@@ -1,3 +1,6 @@
+import random
+import sys
+
 #Variable list:
 # -population_happiness
 # -military_might
@@ -104,38 +107,6 @@ if user_econ == "communist" and user_govstyle == "dictatorship":
   resource_diversity = 60
 
 
-def display_values(VARIABLE):
-  if VARIABLE < 10:
-    VARIABLE_LEVEL = 1
-  elif VARIABLE < 20:
-    VARIABLE_LEVEL = 2
-  elif VARIABLE < 30:
-    VARIABLE_LEVEL = 3
-  elif VARIABLE < 40:
-    VARIABLE_LEVEL = 4
-  elif VARIABLE < 50:
-    VARIABLE_LEVEL = 5
-  elif VARIABLE < 60:
-    VARIABLE_LEVEL = 6    
-  elif VARIABLE < 70:
-    VARIABLE_LEVEL = 7
-  elif VARIABLE < 80:
-    VARIABLE_LEVEL = 8 
-  elif VARIABLE < 90:
-    VARIABLE_LEVEL = 9 
-  else:
-    VARIABLE_LEVEL = 10
-
-  variable_squares = ""
-  blank_squares = 10 - VARIABLE_LEVEL
-  while VARIABLE_LEVEL > 0:
-    variable_squares += "■ "
-    VARIABLE_LEVEL -= 1
-  while blank_squares > 0:
-    variable_squares += "□ "
-    blank_squares -= 1
-  variable_squares += "----> " + str(VARIABLE) + "%"
-  print variable_squares
 
 
 country_shape_small_compact = """
@@ -193,24 +164,17 @@ countries_left_str = "countries left: "
 
 stats = [population_happiness_str, population_happiness, military_might_str, military_might, food_resource_str, food_resource, foreign_relations_str, foreign_relations, total_population_str, total_population, government_wealth_str , government_wealth, resource_diversity_str, resource_diversity, countries_left_str, countries_left]
 
-def display_stats():
-  for i in stats:
-    if i == countries_left_str or i is countries_left:
-      print str(i),
-    else:
-      try:
-        if i == int(i):
-          display_values(i)
-          print " "
-      except ValueError:
-        print i
+
 
 def option_choice():
   print "What would you like to do? For a list of options, type \'help\'"
   global user_option_choice
   user_option_choice = raw_input("Type here: ").lower()
+  print " "
   option_spellcheck()
   option_compare()
+  global stats
+  stats = [population_happiness_str, population_happiness, military_might_str, military_might, food_resource_str, food_resource, foreign_relations_str, foreign_relations, total_population_str, total_population, government_wealth_str , government_wealth, resource_diversity_str, resource_diversity, countries_left_str, countries_left]
   
 def option_compare():
   global user_option_choice
@@ -253,7 +217,88 @@ def option_spellcheck():
     option_spellcheck()
 
 
+def subsidise_farming():
+  print "What percentage of government wealth would you like to invest into farming?"
+  global farming_number
+  farming_number = raw_input("Type your amount here: ")
+  print " "
+  farming_number_spellcheck()
+  farming_number = int(farming_number)
+  sucess_rate = random.randint(15, 100)
+  sucess_rate = float(sucess_rate)
+  if sucess_rate <= 40:
+    print "The subsidies were not a success"
+  elif sucess_rate <= 70:
+    print "The subsidies were a partial success"
+  elif sucess_rate <= 100:
+    print "The subsidies were a complete sucess"
+  new_percentage = farming_number * (sucess_rate / 100)
+  print "Your food increased by " + str(new_percentage) + "%"
+  global food_resource
+  global government_wealth
+  food_resource += new_percentage
+  print " "
+  government_wealth -= farming_number
 
+  
+
+def farming_number_spellcheck():
+  global farming_number
+  try:
+    float(farming_number)
+  except ValueError:
+    print " "
+    print "Please type a number."
+    farming_number = raw_input("Try here: ")
+    farming_number_spellcheck()
+
+def display_stats():
+  for i in stats:
+    if i is int:
+      i = float(i)
+    if i == countries_left_str or i is countries_left:
+      print str(i),
+    else:
+      try:
+        if i == float(i):
+          display_values(i)
+          print " "
+      except ValueError:
+        print i
+  print " "
+
+def display_values(VARIABLE):
+  if VARIABLE < 10:
+    VARIABLE_LEVEL = 1
+  elif VARIABLE < 20:
+    VARIABLE_LEVEL = 2
+  elif VARIABLE < 30:
+    VARIABLE_LEVEL = 3
+  elif VARIABLE < 40:
+    VARIABLE_LEVEL = 4
+  elif VARIABLE < 50:
+    VARIABLE_LEVEL = 5
+  elif VARIABLE < 60:
+    VARIABLE_LEVEL = 6    
+  elif VARIABLE < 70:
+    VARIABLE_LEVEL = 7
+  elif VARIABLE < 80:
+    VARIABLE_LEVEL = 8 
+  elif VARIABLE < 90:
+    VARIABLE_LEVEL = 9 
+  else:
+    VARIABLE_LEVEL = 10
+
+  variable_squares = ""
+  blank_squares = 10 - VARIABLE_LEVEL
+  while VARIABLE_LEVEL > 0:
+    variable_squares += "■ "
+    VARIABLE_LEVEL -= 1
+  while blank_squares > 0:
+    variable_squares += "□ "
+    blank_squares -= 1
+  variable_squares += "----> " + str(VARIABLE) + "%"
+  print variable_squares
 
 
 def gameplay_overview():
@@ -261,6 +306,7 @@ def gameplay_overview():
   print " "
   display_stats()
   option_choice()
+  display_stats()
   
 
 gameplay_overview()
