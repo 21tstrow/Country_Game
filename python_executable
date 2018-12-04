@@ -33,7 +33,7 @@ Ousted -> Democratic -> Low happiness: Voted out of office, GAME OVER
 Ousted -> Dictatorship -> Low foriegn relations and low population happiness: country "liberated", GAME OVER
 
 Options:
-Subsidise Farming -> decrease government wealth, increase food
+Subsidize Farming -> decrease government wealth, increase food
 Take land -> decrease military might, increase resource diversity proportional to previous military might, increase pop happiness, decrease foreign relations, increase government wealth.
 Import -> decrease food or government wealth, increase resource diversity or food
 Export -> decrease food or resource diversity, increase government wealth
@@ -148,7 +148,7 @@ country_shape_big_long = """
 """
 
 
-options = ["subsidise farming", "take land", "import", "export", "take over country", "increase innovation", "accept immigrants", "gift", "deport citizens", "draft citizens", "hold festival", "increase taxes", "help"]
+options = ["subsidize farming", "take land", "import", "export", "take over country", "increase innovation", "accept immigrants", "gift", "deport citizens", "draft citizens", "hold festival", "increase taxes", "help"]
  
 
 countries_left = 4
@@ -178,7 +178,7 @@ def option_choice():
   
 def option_compare():
   global user_option_choice
-  if user_option_choice == "subsidise farming":
+  if user_option_choice == "subsidize farming":
     subsidise_farming()
   if user_option_choice == "take land":
     take_land()
