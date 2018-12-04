@@ -314,14 +314,15 @@ def take_land():
   elif successness <= 50:
     print "The invasion was a complete sucess"
   
-  take_percentage = military_divert * float(successness / 100)
+  take_percentage = military_divert * successness / 100
+  print "Your stats changed by " + str(take_percentage) + "%"
   global population_happiness
   global military_might
   global foreign_relations
   global government_wealth
   global resource_diversity
   population_happiness += take_percentage
-  military_might -= take_percentage
+  military_might -= military_divert
   foreign_relations -= take_percentage
   government_wealth += take_percentage
   resource_diversity += take_percentage
