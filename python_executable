@@ -343,7 +343,6 @@ def import_():
   if user_import == "resources":
     resource_diversity += user_spend
 
-
 def user_spend_check():
   global user_spend
   try:
@@ -403,12 +402,61 @@ def export():
   if user_export == "resources":
     resource_diversity -= user_trade
 
+def increase_innovation():
+  print "How much food and government wealth would you like to spend on innovation:"
+  global food_spend
+  global gov_weal_spend
+  food_spend = raw_input("Food: ")
+  food_spllcheck()
+  food_spend = float(food_spend)
+  gov_weal_spend = raw_input("Government Wealth")
+  gov_weal_spend_chck()
+  gov_weal_spend = float(gov_weal_spend)
+  sucessrate = random.randint(15, 100)
+  sucessrate = float(sucessrate)
+  if sucessrate <= 40:
+    print "The innovation was not a success"
+  elif sucessrate <= 70:
+    print "The innovation was a partial success"
+  elif sucessrate <= 100:
+    print "The innovation was a complete sucess"
+  sucessrate = sucessrate / 100
+  global food_resource
+  global government_wealth
+  global population_happiness
+  global resource_diversity
+  food_resource -= food_spend
+  government_wealth -= gov_weal_spend
+  population_happiness += (food_spend + gov_weal_spend) * (sucessrate / 2)
+  resource_diversity += (food_spend + gov_weal_spend) * (sucessrate / 2)
+  print " "
+  print "Food Resource and Population Happiness were increased by " + str(((food_spend + gov_weal_spend) * (sucessrate / 2))) + "%"
+
+def food_spllcheck():
+  global food_spend
+  try:
+    float(food_spend)
+  except ValueError:
+    print "Please enter a number"
+    food_spend = raw_input("Type here: ")
+    food_spllcheck()
+
+def gov_weal_spend_chck():
+  global gov_weal_spend
+  try:
+    float(gov_weal_spend)
+  except ValueError:
+    print "Please enter a number"
+    gov_weal_spend = raw_input("Type here: ")
+    gov_weal_spend_chck()
+
 def gameplay_overview():
   print " "
   print " "
   display_stats()
   option_choice()
   display_stats()
+
   
 
 
