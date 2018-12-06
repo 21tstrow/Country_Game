@@ -250,6 +250,7 @@ def farming_number_spellcheck():
     farming_number_spellcheck()
 
 def display_stats():
+  print " "
   for i in stats:
     if i is int:
       i = float(i)
@@ -457,9 +458,43 @@ def gameplay_overview():
   option_choice()
   display_stats()
 
+def accept_immigrants():
+  global inc_am
+  print 'How much would you like to increase your population by?'
+  inc_am = raw_input("Type here: ")
+  inc_am_check()
+  inc_am = float(inc_am)
+  sucessra_te = random.randint(15, 100)
+  sucessra_te = float(sucessra_te)
+  if sucessra_te <= 40:
+    print "The immigration was not a success"
+  elif sucessra_te <= 70:
+    print "The immigration was a partial success"
+  elif sucessra_te <= 100:
+    print "The immigration was a complete sucess"
+  sucessra_te = sucessra_te / 100
   
+  global government_wealth
+  global food_resource
+  global total_population
+  global foreign_relations
 
+  government_wealth -= inc_am * (1 - sucessra_te)
+  food_resource -= inc_am * sucessra_te
+  total_population += inc_am
+  foreign_relations += inc_am * sucessra_te
 
+  print "Food Resource and Foreign Relations were changed by " + str(inc_am * sucessra_te) + "%"
+  print "Government wealth was changed by " + str(inc_am * (1 - sucessra_te)) + "%"
+
+def inc_am_check():
+  global inc_am
+  try:
+    float(inc_am)
+  except ValueError:
+    print "Please enter a number"
+    inc_am = raw_input("Type here: ")
+    inc_am_check()
 
 
 
