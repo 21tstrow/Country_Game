@@ -496,7 +496,72 @@ def inc_am_check():
     inc_am = raw_input("Type here: ")
     inc_am_check()
 
+def gift():
+  global gftamt
+  print "How much would you like to give?"
+  gftamt = raw_input("Type here:")
+  gftamt_check()
+  gftamt = float(gftamt)
+  suces_sra_te = random.randint(15, 100)
+  suces_sra_te = float(suces_sra_te)
+  if suces_sra_te <= 40:
+    print "The gift was not a success"
+  elif suces_sra_te <= 70:
+    print "The gift was a partial success"
+  elif suces_sra_te <= 100:
+    print "The gift was a complete sucess"
+  suces_sra_te = suces_sra_te / 100
+  global government_wealth
+  global foreign_relations
+  government_wealth -= gftamt
+  foreign_relations += gftamt * suces_sra_te
+  print "foreign relations were changed by " + str(gftamt * suces_sra_te) + "%"
 
+def gftamt_check():
+  global gftamt
+  try:
 
+    float(gftamt)
+  except ValueError:
+    print "Please enter a number"
+    gftamt = raw_input("Type here: ")
+    gftamt_check()
+
+def deport_citizens():
+  global decc_am
+  print 'How much would you like to decrease your population by?'
+  decc_am = raw_input("Type here: ")
+  decc_am_check()
+  decc_am = float(decc_am)
+  sucessra_te = random.randint(15, 100)
+  sucessra_te = float(sucessra_te)
+  if sucessra_te <= 40:
+    print "The deportation was not a success"
+  elif sucessra_te <= 70:
+    print "The deportation was a partial success"
+  elif sucessra_te <= 100:
+    print "The deportation was a complete sucess"
+  sucessra_te = sucessra_te / 100
+  
+  global government_wealth
+  global food_resource
+  global total_population
+  global population_happiness
+  government_wealth += decc_am * sucessra_te
+  food_resource += decc_am * sucessra_te
+  total_population -= decc_am
+  population_happiness -= decc_am * (1 - sucessra_te)
+
+  print "Food Resource and Government wealth were changed by " + str(decc_am * sucessra_te) + "%"
+  print "Population Happiness was changed by " + str(decc_am * (1 - sucessra_te)) + "%"
+
+def decc_am_check():
+  global decc_am
+  try:
+    float(decc_am)
+  except ValueError:
+    print "Please enter a number"
+    decc_am = raw_input("Type here: ")
+    decc_am_check()
 
 gameplay_overview()
