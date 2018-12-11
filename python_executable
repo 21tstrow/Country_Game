@@ -222,7 +222,7 @@ def subsidise_farming():
   farming_number = raw_input("Type your amount here: ")
   print " "
   farming_number_spellcheck()
-  farming_number = int(farming_number)
+  farming_number = float(farming_number)
   sucess_rate = random.randint(15, 100)
   sucess_rate = float(sucess_rate)
   if sucess_rate <= 40:
@@ -456,7 +456,7 @@ def gameplay_overview():
   print " "
   display_stats()
   option_choice()
-  display_stats()
+  gameplay_overview()
 
 def accept_immigrants():
   global inc_am
