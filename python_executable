@@ -1,4 +1,4 @@
-import random
+﻿import random
 import sys
 
 #Variable list:
@@ -563,5 +563,40 @@ def decc_am_check():
     print "Please enter a number"
     decc_am = raw_input("Type here: ")
     decc_am_check()
+
+def draft_citizens():
+  global draft_count
+  print "How many citizens would you like to draft?"
+  draft_count = raw_input("Type here: ")
+  draft_count_check()
+  draft_count = float(draft_count)
+  sucessra_te = random.randint(15, 100)
+  sucessra_te = float(sucessra_te)
+  if sucessra_te <= 40:
+    print "The draft was not a success"
+  elif sucessra_te <= 70:
+    print "The draft was a partial success"
+  elif sucessra_te <= 100:
+    print "The draft was a complete sucess"
+  sucessra_te = sucessra_te / 100
+  global total_population
+  global population_happiness
+  global military_might
+
+  total_population -= draft_count
+  population_happiness -= draft_count * abs(1-sucessra_te)
+  military_might += draft_count
+  print "total population and military might were changed by " + str(draft_count * sucessra_te) + "%"
+  print "Population Happiness was changed by " + str(draft_count * (1 - sucessra_te)) + "%"
+
+def draft_count_check():
+  global draft_count
+  try:
+    float(draft_count)
+  except ValueError:
+    print "Please enter a number"
+    draft_count = raw_input("Type here: ")
+    draft_count_check()
+
 
 gameplay_overview()
