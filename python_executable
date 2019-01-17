@@ -1,4 +1,4 @@
-﻿import random
+import random
 import sys
 
 #Variable list:
@@ -290,10 +290,10 @@ def display_values(VARIABLE):
   variable_squares = ""
   blank_squares = 10 - VARIABLE_LEVEL
   while VARIABLE_LEVEL > 0:
-    variable_squares += "■ "
+    variable_squares += "[O] "
     VARIABLE_LEVEL -= 1
   while blank_squares > 0:
-    variable_squares += "□ "
+    variable_squares += "[_] "
     blank_squares -= 1
   variable_squares += "----> " + str(VARIABLE) + "%"
   print variable_squares
@@ -598,5 +598,35 @@ def draft_count_check():
     draft_count = raw_input("Type here: ")
     draft_count_check()
 
+def hold_festival():
+  global spend_amount
+  print "How much would you like to spend?"
+  spend_amount = raw_input("Type here: ")
+  spend_amount_check()
+  spend_amount = float(spend_amount)
+  sucessra_te = random.randint(15, 100)
+  sucessra_te = float(sucessra_te)
+  if sucessra_te <= 40:
+    print "The festival was not a success"
+  elif sucessra_te <= 70:
+    print "The festival was a partial success"
+  elif sucessra_te <= 100:
+    print "The festival was a complete sucess"
+  sucessra_te = sucessra_te / 100
+  global government_wealth
+  global population_happiness
+  population_happiness += spend_amount * sucessra_te
+  government_wealth -= spend_amount
+  print "Population happiness was increased by " + str(spend_amount * sucessra_te) + "%"
+  print "Government wealth was decreased by " + str(spend_amount) + "%"
+
+def spend_amount_check():
+  global spend_amount
+  try:
+    float(spend_amount)
+  except ValueError:
+    print "Please enter a number"
+    spend_amount = raw_input("Type here: ")
+    spend_amount_check()
 
 gameplay_overview()
