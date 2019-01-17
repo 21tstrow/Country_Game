@@ -290,10 +290,10 @@ def display_values(VARIABLE):
   variable_squares = ""
   blank_squares = 10 - VARIABLE_LEVEL
   while VARIABLE_LEVEL > 0:
-    variable_squares += "[O] "
+    variable_squares += "# "
     VARIABLE_LEVEL -= 1
   while blank_squares > 0:
-    variable_squares += "[_] "
+    variable_squares += "[] "
     blank_squares -= 1
   variable_squares += "----> " + str(VARIABLE) + "%"
   print variable_squares
@@ -628,5 +628,37 @@ def spend_amount_check():
     print "Please enter a number"
     spend_amount = raw_input("Type here: ")
     spend_amount_check()
+
+def increase_taxes():
+  global tax_amount
+  print "How much would you like to spend?"
+  tax_amount = raw_input("Type here: ")
+  tax_amount_check()
+  tax_amount = float(tax_amount)
+  sucessra_te = random.randint(15, 100)
+  sucessra_te = float(sucessra_te)
+  if sucessra_te <= 40:
+    print "The taxes were not a success"
+  elif sucessra_te <= 70:
+    print "The taxes were a partial success"
+  elif sucessra_te <= 100:
+    print "The taxes were a complete sucess"
+  sucessra_te = sucessra_te / 100
+  global total_population
+  global government_wealth
+  global population_happiness
+  population_happiness += tax_amount
+  government_wealth -= tax_amount
+  print "Government Wealth was increased by " + str(tax_amount * (total_population/100)) + "%"
+  print "Population happiness was decreased by " + str(tax_amount * (1-sucessra_te) + "%"
+
+def tax_amount_check():
+  global tax_amount
+  try:
+    float(tax_amount)
+  except ValueError:
+    print "Please enter a number"
+    tax_amount = raw_input("Type here: ")
+    tax_amount_check()
 
 gameplay_overview()
