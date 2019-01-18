@@ -640,7 +640,7 @@ def tax_amount_check():
 
 def increase_taxes():
   global tax_amount
-  print "How much would you like to spend?"
+  print "What percent of income would you like to tax?"
   tax_amount = raw_input("Type here: ")
   tax_amount_check()
   tax_amount = float(tax_amount)
@@ -656,9 +656,9 @@ def increase_taxes():
   global total_population
   global government_wealth
   global population_happiness
-  population_happiness += tax_amount
-  government_wealth -= tax_amount
-  print "Government Wealth was increased by " + str(tax_amount * (total_population/100)) + "%"
+  population_happiness -= (tax_amount * (1-sucessra_te))
+  government_wealth += (tax_amount * (float(total_population)/100))
+  print "Government Wealth was increased by " + str(tax_amount * (float(total_population)/100)) + "%"
   print "Population happiness was decreased by " + str(tax_amount * (1-sucessra_te)) + "%"
 
 
