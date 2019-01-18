@@ -216,6 +216,10 @@ def option_spellcheck():
     user_option_choice = raw_input("Type here: ")
     option_spellcheck()
 
+#####################################
+'BELOW ARE THE OPTION choices'
+#####################################
+
 def subsidise_farming():
   print "What percentage of government wealth would you like to invest into farming?"
   global farming_number
@@ -450,13 +454,6 @@ def gov_weal_spend_chck():
     print "Please enter a number"
     gov_weal_spend = raw_input("Type here: ")
     gov_weal_spend_chck()
-
-def gameplay_overview():
-  print " "
-  print " "
-  display_stats()
-  option_choice()
-  gameplay_overview()
 
 def accept_immigrants():
   global inc_am
@@ -766,5 +763,64 @@ def take_over_country():
     resource_diversity -= 50
     if resource_diversity < 0:
       resource_diversity = 0
+
+#####################################
+'BELOW ARE THE DISASTER choices'
+#####################################
+
+'''Disaster list:
+Starvation -> Low food: population decreases, happiness decreases
+Invasion -> Low military might and bad foreign relations: country is seized by outsiders, GAME OVER
+Natural disaster -> Low resource diversity: population decreases, happiness decreases
+Coup -> Low population happiness, Low military might: country is seized, GAME OVER
+Devolution -> Low population: pop. is too low so country reverts to farming society. GAME OVER
+Ousted -> Democratic -> Low happiness: Voted out of office, GAME OVER
+Ousted -> Dictatorship -> Low foriegn relations and low population happiness: country liberated, GAME OVER'''
+
+def chance_checker_one(cat):
+  chances = 100 - cat
+  action_chance = chances * random.randint(6,10)
+  if action_chance < 100:
+    return(True)
+
+def chance_checker_two(cat1, cat2):
+  chances = 100 - ((cat1 + cat2)/2)
+  action_chance = chances * random.randint(6,10)
+  if action_chance < 100:
+    return(True)
+
+def runThroughDisasterChances():
+  #Starvation
+  if chance_checker_one(food_resource) == True:
+    print "!!Starvation Occured!!"
+    population_happiness -= random.randint(10,20)
+    total_population -= random.randint(10,20)
+  #Invasion
+  if chance_checker_two(military_might, foreign_relations) == True:
+    print "!!Invasion Occured!!"
+    print "GAME OVER!"
+    sys.exit
+  #Coup
+  if chance_checker_two(military_might, population_happiness) == True:
+    print "!!A Coup Occured!!"
+    print "GAME OVER!"
+    sys.exit
+  #Devolution
+  if chance_checker_one(total_population) == True:
+    print "!!Devolution Occured!!"
+    print "GAME OVER!"
+    sys.exit
+  #Ousted
+  #Natural Disaster
+  
+def gameplay_overview():
+  print " "
+  print " "
+  display_stats()
+  option_choice()
+  display_stats()
+  option_choice()
+  runThroughDisasterChances()
+  gameplay_overview()
 
 gameplay_overview()
