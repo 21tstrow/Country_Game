@@ -10,7 +10,6 @@ import sys
 # -resource diversity
 # -countries left
 
-
 '''
 Goal of the game: take over all neighbouring countries
 #of neighbouring countries -> easy 2, med 3, hard 4
@@ -240,6 +239,7 @@ def subsidise_farming():
   farming_number = float(farming_number)
   sucess_rate = random.randint(15, 100)
   sucess_rate = float(sucess_rate)
+  vars_check(government_wealth, farming_number)
   if sucess_rate <= 40:
     print "The subsidies were not a success"
   elif sucess_rate <= 70:
@@ -324,6 +324,7 @@ def take_land():
   military_divert = raw_input("Type here: ")
   military_div_spell()
   military_divert = float(military_divert)
+  vars_check(military_might, military_divert)
   print_blanks()
   successness = random.randint(7,50)
   if successness <= 15:
@@ -357,8 +358,9 @@ def import_():
   print "How much government wealth would you like to spend?"
   user_spend = raw_input("Type here: ")
   user_spend_check()
-  print_blanks()
   user_spend = float(user_spend)
+  vars_check(government_wealth, user_spend)
+  print_blanks()
   global government_wealth
   government_wealth -= user_spend
   if user_import == "food":
@@ -417,8 +419,12 @@ def export():
   print "How much would you like to export?"
   user_trade = raw_input("Type here: ")
   user_trade_check()
-  print_blanks()
   user_trade = float(user_trade)
+  if user_export == "food":
+    vars_check(food_resource, user_trade)
+  if user_export == "resources":
+    vars_check(resource diversity, user_trade)
+  print_blanks()
   global government_wealth
   government_wealth += user_trade
   if user_export == "food":
@@ -433,12 +439,14 @@ def increase_innovation():
   food_spend = raw_input("Food: ")
   food_spllcheck()
   food_spend = float(food_spend)
-  gov_weal_spend = raw_input("Government Wealth")
+  gov_weal_spend = raw_input("Government Wealth: ")
   gov_weal_spend_chck()
   print_blanks()
   gov_weal_spend = float(gov_weal_spend)
   sucessrate = random.randint(15, 100)
   sucessrate = float(sucessrate)
+  vars_check(government_wealth, gov_weal_spend)
+  vars_check(food_resource, food_spend)
   if sucessrate <= 40:
     print "The innovation was not a success"
   elif sucessrate <= 70:
@@ -480,6 +488,7 @@ def accept_immigrants():
   print 'How much would you like to increase your population by?'
   inc_am = raw_input("Type here: ")
   inc_am_check()
+  vars_check()
   print_blanks()
   inc_am = float(inc_am)
   sucessra_te = random.randint(15, 100)
@@ -519,6 +528,7 @@ def gift():
   print "How much would you like to give?"
   gftamt = raw_input("Type here:")
   gftamt_check()
+  vars_check()
   print_blanks()
   gftamt = float(gftamt)
   suces_sra_te = random.randint(15, 100)
@@ -551,6 +561,7 @@ def deport_citizens():
   print 'How much would you like to decrease your population by?'
   decc_am = raw_input("Type here: ")
   decc_am_check()
+  vars_check()
   print_blanks()
   decc_am = float(decc_am)
   sucessra_te = random.randint(15, 100)
@@ -589,6 +600,7 @@ def draft_citizens():
   print "How many citizens would you like to draft?"
   draft_count = raw_input("Type here: ")
   draft_count_check()
+  vars_check()
   print_blanks()
   draft_count = float(draft_count)
   sucessra_te = random.randint(15, 100)
@@ -624,6 +636,7 @@ def hold_festival():
   print "How much would you like to spend?"
   spend_amount = raw_input("Type here: ")
   spend_amount_check()
+  vars_check()
   print_blanks()
   spend_amount = float(spend_amount)
   sucessra_te = random.randint(15, 100)
@@ -665,6 +678,7 @@ def increase_taxes():
   print "What percent of income would you like to tax?"
   tax_amount = raw_input("Type here: ")
   tax_amount_check()
+  vars_check()
   print_blanks()
   tax_amount = float(tax_amount)
   sucessra_te = random.randint(15, 100)
@@ -884,6 +898,10 @@ def gameplay_overview():
   runThroughDisasterChances()
   gameplay_overview()
 
-
-
+def vars_check(i, x):
+  if (i - x) < 0:
+    print "You do not have enough" + i + "to complete that action."
+    option_choice()
+    
+variables = [population_happiness, military_might, food_resource, foreign_relations, total_population, government_wealth, resource_diversity, countries_left]
 gameplay_overview()
