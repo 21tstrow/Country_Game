@@ -1,6 +1,5 @@
 import random
 import sys
-
 #Variable list:
 # -population_happiness
 # -military_might
@@ -107,44 +106,55 @@ if user_econ == "communist" and user_govstyle == "dictatorship":
   resource_diversity = 60
 
 
-
+castle = """      -|             |-
+         -|                  [-_-_-_-_-_-_-_-]                  |-
+         [-_-_-_-_-]          |             |          [-_-_-_-_-]
+          | o   o |           [  0   0   0  ]           | o   o |
+           |     |    -|       |           |       |-    |     |
+           |     |_-___-___-___-|         |-___-___-___-_|     |
+           |  o  ]              [    0    ]              [  o  |
+           |     ]   o   o   o  [ _______ ]  o   o   o   [     | ----__________
+_____----- |     ]              [ ||||||| ]              [     |
+           |     ]              [ ||||||| ]              [     |
+       _-_-|_____]--------------[_|||||||_]--------------[_____|-_-_
+      ( (__________------------_____________-------------_________) )"""
 
 country_shape_small_compact = """
   ________
- /        \
+ /        \\
 |   YOUR   |
 |  COUNTRY |
- \________/
+ \\________/
 """
 
 country_shape_big_compact = """ 
     ________________
-   /                \
-  /                  \
- /                    \
+   /                \\
+  /                  \\
+ /                    \\
 |         YOUR         |
 |        COUNTRY       |
- \                    /
-  \                  /
-   \________________/
+ \\                    /
+  \\                  /
+   \\________________/
 """
 
 country_shape_small_long = """ 
   _________________
- /      YOUR       \
+ /      YOUR       \\
 |      COUNTRY      |
- \_________________/
+ \\_________________/
 """
 
 
 country_shape_big_long = """
 
    _________________________
-  /                         \
- /           YOUR            \
+  /                         \\
+ /           YOUR            \\
 |           COUNTRY           |
 |                             |
- \___________________________/
+ \\___________________________/
 """
 
 
@@ -226,6 +236,7 @@ def subsidise_farming():
   farming_number = raw_input("Type your amount here: ")
   print " "
   farming_number_spellcheck()
+  print_blanks()
   farming_number = float(farming_number)
   sucess_rate = random.randint(15, 100)
   sucess_rate = float(sucess_rate)
@@ -254,6 +265,11 @@ def farming_number_spellcheck():
     farming_number_spellcheck()
 
 def display_stats():
+  print castle
+  print " "
+  print " "
+  print " "
+  end_game()
   print " "
   for i in stats:
     if i is int:
@@ -308,6 +324,7 @@ def take_land():
   military_divert = raw_input("Type here: ")
   military_div_spell()
   military_divert = float(military_divert)
+  print_blanks()
   successness = random.randint(7,50)
   if successness <= 15:
     print "The invasion was not a success"
@@ -340,6 +357,7 @@ def import_():
   print "How much government wealth would you like to spend?"
   user_spend = raw_input("Type here: ")
   user_spend_check()
+  print_blanks()
   user_spend = float(user_spend)
   global government_wealth
   government_wealth -= user_spend
@@ -399,6 +417,7 @@ def export():
   print "How much would you like to export?"
   user_trade = raw_input("Type here: ")
   user_trade_check()
+  print_blanks()
   user_trade = float(user_trade)
   global government_wealth
   government_wealth += user_trade
@@ -416,6 +435,7 @@ def increase_innovation():
   food_spend = float(food_spend)
   gov_weal_spend = raw_input("Government Wealth")
   gov_weal_spend_chck()
+  print_blanks()
   gov_weal_spend = float(gov_weal_spend)
   sucessrate = random.randint(15, 100)
   sucessrate = float(sucessrate)
@@ -435,7 +455,7 @@ def increase_innovation():
   population_happiness += (food_spend + gov_weal_spend) * (sucessrate / 2)
   resource_diversity += (food_spend + gov_weal_spend) * (sucessrate / 2)
   print " "
-  print "Food Resource and Population Happiness were increased by " + str(((food_spend + gov_weal_spend) * (sucessrate / 2))) + "%"
+  print "Resource Diversity and Population Happiness were increased by " + str(((food_spend + gov_weal_spend) * (sucessrate / 2))) + "%"
 
 def food_spllcheck():
   global food_spend
@@ -460,6 +480,7 @@ def accept_immigrants():
   print 'How much would you like to increase your population by?'
   inc_am = raw_input("Type here: ")
   inc_am_check()
+  print_blanks()
   inc_am = float(inc_am)
   sucessra_te = random.randint(15, 100)
   sucessra_te = float(sucessra_te)
@@ -498,6 +519,7 @@ def gift():
   print "How much would you like to give?"
   gftamt = raw_input("Type here:")
   gftamt_check()
+  print_blanks()
   gftamt = float(gftamt)
   suces_sra_te = random.randint(15, 100)
   suces_sra_te = float(suces_sra_te)
@@ -529,6 +551,7 @@ def deport_citizens():
   print 'How much would you like to decrease your population by?'
   decc_am = raw_input("Type here: ")
   decc_am_check()
+  print_blanks()
   decc_am = float(decc_am)
   sucessra_te = random.randint(15, 100)
   sucessra_te = float(sucessra_te)
@@ -566,6 +589,7 @@ def draft_citizens():
   print "How many citizens would you like to draft?"
   draft_count = raw_input("Type here: ")
   draft_count_check()
+  print_blanks()
   draft_count = float(draft_count)
   sucessra_te = random.randint(15, 100)
   sucessra_te = float(sucessra_te)
@@ -600,6 +624,7 @@ def hold_festival():
   print "How much would you like to spend?"
   spend_amount = raw_input("Type here: ")
   spend_amount_check()
+  print_blanks()
   spend_amount = float(spend_amount)
   sucessra_te = random.randint(15, 100)
   sucessra_te = float(sucessra_te)
@@ -640,6 +665,7 @@ def increase_taxes():
   print "What percent of income would you like to tax?"
   tax_amount = raw_input("Type here: ")
   tax_amount_check()
+  print_blanks()
   tax_amount = float(tax_amount)
   sucessra_te = random.randint(15, 100)
   sucessra_te = float(sucessra_te)
@@ -673,6 +699,7 @@ Draft citizens -> decrease pop. and pop happiness, increase military might
 Hold festival -> decrease government wealth, increase population happiness
 Increase taxes -> decrease pop happiness, increase government wealth proportional to pop.
 '''
+  option_choice()
 
 
 
@@ -711,7 +738,7 @@ def sucess_chance():
   global country_used
   countdiff = military_might - country_used
   if countdiff < 0:
-    countdiff = 15
+    countdiff = 12
   elif countdiff < 20:
     countdiff = 20
   chanceroni = countdiff * random.randint(1,10)
@@ -724,7 +751,7 @@ def take_over_country():
   global mmcountry_2
   global mmcountry_3
   global mmcountry_4
-  mmcountry_1 = random.randint(35, 35)
+  mmcountry_1 = random.randint(35, 100)
   mmcountry_2 = random.randint(35, 100)
   mmcountry_3 = random.randint(35, 100)
   mmcountry_4 = random.randint(35, 100)
@@ -747,6 +774,7 @@ def take_over_country():
   mm = country_used
   sucess_chance()
   print country_used
+  print_blanks()
   if country_used > 100:
     print "THE ATTACK WAS A SUCCESS!"
     countries_left -= 1
@@ -825,7 +853,7 @@ def runThroughDisasterChances():
       print "GAME OVER!"
       sys.exit
   else:
-    if chance_checker_two(population_happiness, foriegn_relations) == True:
+    if chance_checker_two(population_happiness, foreign_relations) == True:
       print "!!You have been ousted by your own citizens!!"
       print "GAME OVER!"
       sys.exit
@@ -835,6 +863,17 @@ def runThroughDisasterChances():
     population_happiness -= random.randint(10,20)
     total_population -= random.randint(10,20)
   
+def print_blanks():
+  blnk_cntr = 35
+  while blnk_cntr >= 0:
+    print " "
+    blnk_cntr -= 1
+
+def end_game():
+  if countries_left <= 0:
+    print "You Win"
+    sys.exit
+
 def gameplay_overview():
   print " "
   print " "
@@ -844,5 +883,7 @@ def gameplay_overview():
   option_choice()
   runThroughDisasterChances()
   gameplay_overview()
+
+
 
 gameplay_overview()
