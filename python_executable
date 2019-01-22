@@ -790,6 +790,14 @@ def chance_checker_two(cat1, cat2):
     return(True)
 
 def runThroughDisasterChances():
+  global countries_left
+  global population_happiness
+  global military_might
+  global food_resource
+  global foreign_relations
+  global total_population
+  global government_wealth
+  global resource_diversity
   #Starvation
   if chance_checker_one(food_resource) == True:
     print "!!Starvation Occured!!"
@@ -811,7 +819,21 @@ def runThroughDisasterChances():
     print "GAME OVER!"
     sys.exit
   #Ousted
+  if user_govstyle == "dictatorship":
+    if chance_checker_one(population_happiness) == True:
+      print "!!You have been ousted by a foreign country!!"
+      print "GAME OVER!"
+      sys.exit
+  else:
+    if chance_checker_two(population_happiness, foriegn_relations) == True:
+      print "!!You have been ousted by your own citizens!!"
+      print "GAME OVER!"
+      sys.exit
   #Natural Disaster
+  if chance_checker_one(resource_diversity) == True:
+    print "!!A Natural Disaster Occured!!"
+    population_happiness -= random.randint(10,20)
+    total_population -= random.randint(10,20)
   
 def gameplay_overview():
   print " "
