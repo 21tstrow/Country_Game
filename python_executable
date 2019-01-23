@@ -230,6 +230,7 @@ def option_spellcheck():
 #####################################
 
 def subsidise_farming():
+  global government_wealth
   print "What percentage of government wealth would you like to invest into farming?"
   global farming_number
   farming_number = raw_input("Type your amount here: ")
@@ -250,7 +251,6 @@ def subsidise_farming():
   new_percentage = farming_number * (sucess_rate / 100)
   print "Your food increased by " + str(new_percentage) + "%"
   global food_resource
-  global government_wealth
   food_resource += new_percentage
   print " "
   government_wealth -= farming_number 
@@ -320,6 +320,7 @@ def display_values(VARIABLE):
   print variable_squares
 
 def take_land():
+  global military_might
   global military_divert
   print "What percentage of your military power will you devert to capturing and defending land?"
   military_divert = raw_input("Type here: ")
@@ -339,7 +340,6 @@ def take_land():
   take_percentage = military_divert * successness / 100
   print "Your stats changed by " + str(take_percentage) + "%"
   global population_happiness
-  global military_might
   global foreign_relations
   global government_wealth
   global resource_diversity
@@ -350,6 +350,7 @@ def take_land():
   resource_diversity += take_percentage
   
 def import_():
+  global government_wealth
   global user_import
   global user_spend
   global food_resource
@@ -364,7 +365,6 @@ def import_():
   if vars_check(government_wealth, user_spend)  == True:
     return
   print_blanks()
-  global government_wealth
   government_wealth -= user_spend
   if user_import == "food":
     food_resource += user_spend
@@ -439,6 +439,8 @@ def export():
 
 def increase_innovation():
   print "How much food and government wealth would you like to spend on innovation:"
+  global food_resource
+  global government_wealth
   global food_spend
   global gov_weal_spend
   food_spend = raw_input("Food: ")
@@ -461,8 +463,6 @@ def increase_innovation():
   elif sucessrate <= 100:
     print "The innovation was a complete sucess"
   sucessrate = sucessrate / 100
-  global food_resource
-  global government_wealth
   global population_happiness
   global resource_diversity
   food_resource -= food_spend
@@ -530,6 +530,7 @@ def inc_am_check():
     inc_am_check()
 
 def gift():
+  global government_wealth
   global gftamt
   print "How much would you like to give?"
   gftamt = raw_input("Type here:")
@@ -547,7 +548,6 @@ def gift():
   elif suces_sra_te <= 100:
     print "The gift was a complete sucess"
   suces_sra_te = suces_sra_te / 100
-  global government_wealth
   global foreign_relations
   government_wealth -= gftamt
   foreign_relations += gftamt * suces_sra_te
@@ -564,6 +564,7 @@ def gftamt_check():
     gftamt_check()
 
 def deport_citizens():
+  global total_population
   global decc_am
   print 'How much would you like to decrease your population by?'
   decc_am = raw_input("Type here: ")
@@ -584,7 +585,6 @@ def deport_citizens():
   
   global government_wealth
   global food_resource
-  global total_population
   global population_happiness
   government_wealth += decc_am * sucessra_te
   food_resource += decc_am * sucessra_te
@@ -604,6 +604,7 @@ def decc_am_check():
     decc_am_check()
 
 def draft_citizens():
+  global total_population
   global draft_count
   print "How many citizens would you like to draft?"
   draft_count = raw_input("Type here: ")
@@ -621,10 +622,8 @@ def draft_citizens():
   elif sucessra_te <= 100:
     print "The draft was a complete sucess"
   sucessra_te = sucessra_te / 100
-  global total_population
   global population_happiness
   global military_might
-
   total_population -= draft_count
   population_happiness -= draft_count * abs(1-sucessra_te)
   military_might += draft_count
@@ -641,6 +640,7 @@ def draft_count_check():
     draft_count_check()
 
 def hold_festival():
+  global government_wealth
   global spend_amount
   print "How much would you like to spend?"
   spend_amount = raw_input("Type here: ")
@@ -658,7 +658,6 @@ def hold_festival():
   elif sucessra_te <= 100:
     print "The festival was a complete sucess"
   sucessra_te = sucessra_te / 100
-  global government_wealth
   global population_happiness
   population_happiness += spend_amount * sucessra_te
   government_wealth -= spend_amount
@@ -685,6 +684,7 @@ def tax_amount_check():
 
 def increase_taxes():
   global tax_amount
+  global total_population
   print "What percent of income would you like to tax?"
   tax_amount = raw_input("Type here: ")
   tax_amount_check()
@@ -701,7 +701,6 @@ def increase_taxes():
   elif sucessra_te <= 100:
     print "The taxes were a complete sucess"
   sucessra_te = sucessra_te / 100
-  global total_population
   global government_wealth
   global population_happiness
   population_happiness -= (tax_amount * (1-sucessra_te))
@@ -831,13 +830,13 @@ Ousted -> Democratic -> Low happiness: Voted out of office, GAME OVER
 Ousted -> Dictatorship -> Low foriegn relations and low population happiness: country liberated, GAME OVER'''
 
 def chance_checker_one(cat):
-  chances = 100 - cat
+  chances = cat
   action_chance = chances * random.randint(6,10)
   if action_chance < 100:
     return(True)
 
 def chance_checker_two(cat1, cat2):
-  chances = 100 - ((cat1 + cat2)/2)
+  chances = ((cat1 + cat2)/2)
   action_chance = chances * random.randint(6,10)
   if action_chance < 100:
     return(True)
