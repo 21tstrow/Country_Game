@@ -45,7 +45,7 @@ Hold festival -> decrease government wealth, increase population happiness
 Increase taxes -> decrease pop happiness, increase government wealth proportional to pop.
 '''
 
-countries_takeover = [1,2,3,4]
+countries_takeover = [1, 2, 3, 4]
 
 user_econ = raw_input("Would you like a Capitalist or Communist government? Type here: ").lower()
 def spell_check_econ():
@@ -739,10 +739,18 @@ def country_choice_spellcheck():
   global mmcountry_4
   global country_choice
   global country_used
+  testcasecountchoice = 0
   if not(country_choice == "1" or country_choice == "2" or country_choice == "3" or country_choice == "4"):
     print "Only type the integer, please."
     country_choice = raw_input("Type here: ")
     country_choice_spellcheck()
+  for x in countries_takeover:
+    if int(country_choice) == x:
+      testcasecountchoice = 1
+  if testcasecountchoice == 0:
+    print "You've already taken over that country! Please choose one from the list!"
+    country_choice = raw_input("Type here: ")
+    country_choice_spellcheck()    
   if country_choice == "1":
     country_used = mmcountry_1
   if country_choice == "2":
@@ -792,18 +800,24 @@ def take_over_country():
   global country_choice
   print "Which countries do you want to take over?"
   for x in countries_takeover:
-    if x = 1:
+    if x == 1:
       print "The military might of country 1 is: " + str(mmcountry_1)
-    if x = 2: 
+    if x == 2: 
       print "The military might of country 2 is: " + str(mmcountry_2)
-    if x = 3:
+    if x == 3:
       print "The military might of country 3 is: " + str(mmcountry_3)
-    if x = 4:
+    if x == 4:
       print "The military might of country 4 is: " + str(mmcountry_4)
   country_choice = raw_input("Type the number of the country in integer form here: ")
   country_choice_spellcheck()
-  if country_choice = 1:
+  if country_choice == "1":
     countries_takeover.remove(1)
+  if country_choice == "2":
+    countries_takeover.remove(2)
+  if country_choice == "3":
+    countries_takeover.remove(3)
+  if country_choice == "4":
+    countries_takeover.remove(4)
   mm = country_used
   sucess_chance()
   print country_used
@@ -868,28 +882,28 @@ def runThroughDisasterChances():
   if chance_checker_two(military_might, foreign_relations) == True:
     print "!!Invasion Occured!!"
     print "GAME OVER!"
-    sys.exit
+    sys.exit()
   #Coup
   if chance_checker_two(military_might, population_happiness) == True:
     print "!!A Coup Occured!!"
     print "GAME OVER!"
-    sys.exit
+    sys.exit()
   #Devolution
   if chance_checker_one(total_population) == True:
     print "!!Devolution Occured!!"
     print "GAME OVER!"
-    sys.exit
+    sys.exit()
   #Ousted
   if user_govstyle == "dictatorship":
     if chance_checker_one(population_happiness) == True:
       print "!!You have been ousted by a foreign country!!"
       print "GAME OVER!"
-      sys.exit
+      sys.exit()
   else:
     if chance_checker_two(population_happiness, foreign_relations) == True:
       print "!!You have been ousted by your own citizens!!"
       print "GAME OVER!"
-      sys.exit
+      sys.exit()
   #Natural Disaster
   if chance_checker_one(resource_diversity) == True:
     print "!!A Natural Disaster Occured!!"
@@ -905,7 +919,7 @@ def print_blanks():
 def end_game():
   if countries_left <= 0:
     print "You Win"
-    sys.exit
+    sys.exit()
 
 def gameplay_overview():
   print " "
