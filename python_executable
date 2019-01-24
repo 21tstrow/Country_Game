@@ -45,6 +45,8 @@ Hold festival -> decrease government wealth, increase population happiness
 Increase taxes -> decrease pop happiness, increase government wealth proportional to pop.
 '''
 
+countries_takeover = [1,2,3,4]
+
 user_econ = raw_input("Would you like a Capitalist or Communist government? Type here: ").lower()
 def spell_check_econ():
   global user_econ
@@ -789,12 +791,19 @@ def take_over_country():
   global resource_diversity
   global country_choice
   print "Which countries do you want to take over?"
-  print "The military might of country 1 is: " + str(mmcountry_1)
-  print "The military might of country 2 is: " + str(mmcountry_2)
-  print "The military might of country 3 is: " + str(mmcountry_3)
-  print "The military might of country 4 is: " + str(mmcountry_4)
+  for x in countries_takeover:
+    if x = 1:
+      print "The military might of country 1 is: " + str(mmcountry_1)
+    if x = 2: 
+      print "The military might of country 2 is: " + str(mmcountry_2)
+    if x = 3:
+      print "The military might of country 3 is: " + str(mmcountry_3)
+    if x = 4:
+      print "The military might of country 4 is: " + str(mmcountry_4)
   country_choice = raw_input("Type the number of the country in integer form here: ")
   country_choice_spellcheck()
+  if country_choice = 1:
+    countries_takeover.remove(1)
   mm = country_used
   sucess_chance()
   print country_used
