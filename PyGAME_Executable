@@ -1,1 +1,954 @@
+import random
+import pygame
+from pygame.locals import *
+import sys
+#Variable list:
+# -population_happiness
+# -military_might
+# -food_resource
+# -foreign_relations
+# -total_population
+# -government wealth
+# -resource diversity
+# -countries left
+
+'''
+Goal of the game: take over all neighbouring countries
+#of neighbouring countries -> easy 2, med 3, hard 4
+
+To begin game: User chooses capitalist or communist economy, then chooses democracy or dictatorship
+Initial stats change based on choice
+
+The game functions as follows:
+The higher a value, the lower the chance of a disaster in response to that event.
+A player can preform two options per "Year" turn
+
+Disaster list:
+Starvation -> Low food: population decreases, happiness decreases
+Invasion -> Low military might and bad foreign relations: country is seized by outsiders, GAME OVER
+Natural disaster -> Low resource diversity: population decreases, happiness decreases
+Coup -> Low population happiness, Low military might: country is seized, GAME OVER
+Devolution -> Low population: pop. is too low so country reverts to farming society. GAME OVER
+Ousted -> Democratic -> Low happiness: Voted out of office, GAME OVER
+Ousted -> Dictatorship -> Low foriegn relations and low population happiness: country "liberated", GAME OVER
+
+Options:
+Subsidize Farming -> decrease government wealth, increase food
+Take land -> decrease military might, increase resource diversity proportional to previous military might, increase pop happiness, decrease foreign relations, increase government wealth.
+Import -> decrease government wealth, increase resource diversity or food
+Export -> decrease food or resource diversity, increase government wealth
+Take over country -> if military might is greater than neighbouring country, gain 25% to every category but lose % military might proportional to neighbouring country's military might vs. own and 25% foreign relations; else, lose 50% military might and resource diversity
+Increase innovation -> decrease government wealth and food, increase resource diversity and population happiness
+Accept immigrants -> decrease food and government wealth, increase pop. and foreign_relations
+Gift -> decrease government wealth, increase foriegn relations
+Deport citizens -> decrease pop. and population happiness, increase food resource and government wealth
+Draft citizens -> decrease pop. and pop happiness, increase military might
+Hold festival -> decrease government wealth, increase population happiness
+Increase taxes -> decrease pop happiness, increase government wealth proportional to pop.
+'''
+
+countries_takeover = [1, 2, 3, 4]
+
+user_econ = input("Would you like a Capitalist or Communist government? Type here: ").lower()
+def spell_check_econ():
+  global user_econ
+  if user_econ != "capitalist" and user_econ != "communist":
+    print(" ")
+    print("Double check your spelling and try again.")
+    user_econ = input("Type here:")
+    print(" ")
+    spell_check_econ()
+spell_check_econ()
+
+print("What type of leadership do you want? Democracy or Dictatorship")
+user_govstyle = input("Type here:").lower()
+def spell_check_govstyle():
+  global user_govstyle
+  if user_govstyle !=  "democracy" and user_govstyle != "dictatorship":
+    print(" ")
+    print("Double check your spelling and try again.")
+    user_govstyle = input("Type here: ")
+    print(" ")
+    spell_check_govstyle()
+spell_check_govstyle()
+
+if user_econ == "capitalist" and user_govstyle == "democracy":
+  population_happiness = 75
+  military_might = 40
+  food_resource = 50
+  foreign_relations = 30
+  total_population = 35
+  government_wealth = 10
+  resource_diversity = 50
+#290
+if user_econ == "capitalist" and user_govstyle == "dictatorship":
+  population_happiness = 30
+  military_might = 80
+  food_resource = 25
+  foreign_relations = 30
+  total_population = 35
+  government_wealth = 50
+  resource_diversity = 40
+
+if user_econ == "communist" and user_govstyle == "democracy":
+  population_happiness = 50
+  military_might = 50
+  food_resource = 25
+  foreign_relations = 50
+  total_population = 50
+  government_wealth = 50
+  resource_diversity = 15
+
+if user_econ == "communist" and user_govstyle == "dictatorship":
+  population_happiness = 20
+  military_might = 50
+  food_resource = 20
+  foreign_relations = 20
+  total_population = 80
+  government_wealth = 40
+  resource_diversity = 60
+
+
+castle = """      -|             |-
+         -|                  [-_-_-_-_-_-_-_-]                  |-
+         [-_-_-_-_-]          |             |          [-_-_-_-_-]
+          | o   o |           [  0   0   0  ]           | o   o |
+           |     |    -|       |           |       |-    |     |
+           |     |_-___-___-___-|         |-___-___-___-_|     |
+           |  o  ]              [    0    ]              [  o  |
+           |     ]   o   o   o  [ _______ ]  o   o   o   [     | ----__________
+_____----- |     ]              [ ||||||| ]              [     |
+           |     ]              [ ||||||| ]              [     |
+       _-_-|_____]--------------[_|||||||_]--------------[_____|-_-_
+      ( (__________------------_____________-------------_________) )"""
+
+country_shape_small_compact = """
+  ________
+ /        \\
+|   YOUR   |
+|  COUNTRY |
+ \\________/
+"""
+
+country_shape_big_compact = """ 
+    ________________
+   /                \\
+  /                  \\
+ /                    \\
+|         YOUR         |
+|        COUNTRY       |
+ \\                    /
+  \\                  /
+   \\________________/
+"""
+
+country_shape_small_long = """ 
+  _________________
+ /      YOUR       \\
+|      COUNTRY      |
+ \\_________________/
+"""
+
+
+country_shape_big_long = """
+
+   _________________________
+  /                         \\
+ /           YOUR            \\
+|           COUNTRY           |
+|                             |
+ \\___________________________/
+"""
+
+
+options = ["subsidize farming", "take land", "import", "export", "take over country", "increase innovation", "accept immigrants", "gift", "deport citizens", "draft citizens", "hold festival", "increase taxes", "help"]
+ 
+
+countries_left = 4
+
+population_happiness_str = "population happiness"
+military_might_str = "military might"
+food_resource_str = "food resource"
+foreign_relations_str = "foreign relations"
+total_population_str = "total population"
+government_wealth_str = "government wealth"
+resource_diversity_str = "resource diversity"
+countries_left_str = "countries left: "
+
+stats = [population_happiness_str, population_happiness, military_might_str, military_might, food_resource_str, food_resource, foreign_relations_str, foreign_relations, total_population_str, total_population, government_wealth_str , government_wealth, resource_diversity_str, resource_diversity, countries_left_str, countries_left]
+
+
+
+def option_choice():
+  print("What would you like to do? For a list of options, type \'help\'")
+  global user_option_choice
+  user_option_choice = input("Type here: ").lower()
+  print(" ")
+  option_spellcheck()
+  option_compare()
+  global stats
+  stats = [population_happiness_str, population_happiness, military_might_str, military_might, food_resource_str, food_resource, foreign_relations_str, foreign_relations, total_population_str, total_population, government_wealth_str , government_wealth, resource_diversity_str, resource_diversity, countries_left_str, countries_left]
+  
+def option_compare():
+  global user_option_choice
+  if user_option_choice == "subsidize farming":
+    subsidise_farming()
+  if user_option_choice == "take land":
+    take_land()
+  if user_option_choice == "import":
+   import_()
+  if user_option_choice == "export":
+    export()  
+  if user_option_choice == "take over country":
+    take_over_country()
+  if user_option_choice == "increase innovation":
+    increase_innovation()
+  if user_option_choice == "accept immigrants":
+    accept_immigrants()
+  if user_option_choice == "gift":
+    gift()
+  if user_option_choice == "deport citizens":
+    deport_citizens()
+  if user_option_choice == "draft citizens":
+    draft_citizens()
+  if user_option_choice == "hold festival":
+    hold_festival()
+  if user_option_choice == "increase taxes":
+    increase_taxes()
+  if user_option_choice == "help":
+    help_()
+
+def option_spellcheck():
+  global user_option_choice
+  testcase = 1
+  for i in options:
+    if i == user_option_choice:
+      testcase = 0
+  if testcase == 1:
+    print("Double check your spelling and try again. For a list of options, type \'help\'")
+    user_option_choice = input("Type here: ")
+    option_spellcheck()
+
+#####################################
+'BELOW ARE THE OPTION choices'
+#####################################
+
+def subsidise_farming():
+  global government_wealth
+  print("What percentage of government wealth would you like to invest into farming?")
+  global farming_number
+  farming_number = input("Type your amount here: ")
+  print(" ")
+  farming_number_spellcheck()
+  farming_number = float(farming_number)
+  sucess_rate = random.randint(15, 100)
+  sucess_rate = float(sucess_rate)
+  if vars_check(government_wealth, farming_number) == True:
+    return
+  print_blanks()
+  if sucess_rate <= 40:
+    print("The subsidies were not a success")
+  elif sucess_rate <= 70:
+    print("The subsidies were a partial success")
+  elif sucess_rate <= 100:
+    print("The subsidies were a complete sucess")
+  new_percentage = farming_number * (sucess_rate / 100)
+  print("Your food increased by " + str(new_percentage) + "%")
+  global food_resource
+  food_resource += new_percentage
+  print(" ")
+  government_wealth -= farming_number 
+
+def farming_number_spellcheck():
+  global farming_number
+  try:
+    float(farming_number)
+  except ValueError:
+    print(" ")
+    print("Please type a number.")
+    farming_number = input("Try here: ")
+    farming_number_spellcheck()
+
+def display_stats():
+  print(castle)
+  print(" ")
+  print(" ")
+  print(" ")
+  end_game()
+  print(" ")
+  for i in stats:
+    if i is int:
+      i = float(i)
+    if i == countries_left_str or i is countries_left:
+      print(str(i), end=' ')
+    else:
+      try:
+        if i == float(i):
+          display_values(i)
+          print(" ")
+      except ValueError:
+        print(i)
+  print(" ")
+
+def display_values(VARIABLE):
+  if VARIABLE < 10:
+    VARIABLE_LEVEL = 1
+  elif VARIABLE < 20:
+    VARIABLE_LEVEL = 2
+  elif VARIABLE < 30:
+    VARIABLE_LEVEL = 3
+  elif VARIABLE < 40:
+    VARIABLE_LEVEL = 4
+  elif VARIABLE < 50:
+    VARIABLE_LEVEL = 5
+  elif VARIABLE < 60:
+    VARIABLE_LEVEL = 6    
+  elif VARIABLE < 70:
+    VARIABLE_LEVEL = 7
+  elif VARIABLE < 80:
+    VARIABLE_LEVEL = 8 
+  elif VARIABLE < 90:
+    VARIABLE_LEVEL = 9 
+  else:
+    VARIABLE_LEVEL = 10
+
+  variable_squares = ""
+  blank_squares = 10 - VARIABLE_LEVEL
+  while VARIABLE_LEVEL > 0:
+    variable_squares += "# "
+    VARIABLE_LEVEL -= 1
+  while blank_squares > 0:
+    variable_squares += "[] "
+    blank_squares -= 1
+  variable_squares += "----> " + str(VARIABLE) + "%"
+  print(variable_squares)
+
+def take_land():
+  global military_might
+  global military_divert
+  print("What percentage of your military power will you devert to capturing and defending land?")
+  military_divert = input("Type here: ")
+  military_div_spell()
+  military_divert = float(military_divert)
+  if vars_check(military_might, military_divert)  == True:
+    return
+  print_blanks()
+  successness = random.randint(7,50)
+  if successness <= 15:
+    print("The invasion was not a success")
+  elif successness <= 35:
+    print("The invasion was a partial success")
+  elif successness <= 50:
+    print("The invasion was a complete sucess")
+  
+  take_percentage = military_divert * successness / 100
+  print("Your stats changed by " + str(take_percentage) + "%")
+  global population_happiness
+  global foreign_relations
+  global government_wealth
+  global resource_diversity
+  population_happiness += take_percentage
+  military_might -= military_divert
+  foreign_relations -= take_percentage
+  government_wealth += take_percentage
+  resource_diversity += take_percentage
+  
+def import_():
+  global government_wealth
+  global user_import
+  global user_spend
+  global food_resource
+  global resource_diversity
+  print("Would you like to import food or resources?")
+  user_import = input("Type here: ")
+  import_check()
+  print("How much government wealth would you like to spend?")
+  user_spend = input("Type here: ")
+  user_spend_check()
+  user_spend = float(user_spend)
+  if vars_check(government_wealth, user_spend)  == True:
+    return
+  print_blanks()
+  government_wealth -= user_spend
+  if user_import == "food":
+    food_resource += user_spend
+  if user_import == "resources":
+    resource_diversity += user_spend
+
+def user_spend_check():
+  global user_spend
+  try:
+    float(user_spend)
+  except ValueError:
+    print("Please type a number")
+    user_spend = input("Type here: ")
+    user_spend_check()
+
+def user_trade_check():
+  global user_trade
+  try:
+    float(user_trade)
+  except ValueError:
+    print("Please type a number")
+    user_trade = input("Type here: ")
+    user_trade_check()
+
+def import_check():
+  global user_import
+  if user_import != "food" and user_import != "resources":
+    print("Please type either food or resources")
+    user_import = input("Type here: ")
+    import_check()
+
+def export_check():
+  global user_export
+  if user_export != "food" and user_export != "resources":
+    print("Please type either food or resources")
+    user_export = input("Type here: ")
+    export_check()
+
+def military_div_spell():
+  global military_divert
+  try:
+    float(military_divert)
+  except ValueError:
+    military_divert = (input("Type a number, please: "))
+    military_div_spell()
+
+def export():
+  global user_export
+  global user_trade
+  global food_resource
+  global resource_diversity
+  print("Would you like to export food or resources?")
+  user_export = input("Type here: ")
+  export_check()
+  print("How much would you like to export?")
+  user_trade = input("Type here: ")
+  user_trade_check()
+  user_trade = float(user_trade)
+  if user_export == "food":
+    if vars_check(food_resource, user_trade) == True:
+      return
+  if user_export == "resources":
+    if vars_check(resource_diversity, user_trade) == True:
+      return
+  print_blanks()
+  global government_wealth
+  government_wealth += user_trade
+  if user_export == "food":
+    food_resource -= user_trade
+  if user_export == "resources":
+    resource_diversity -= user_trade
+
+def increase_innovation():
+  print("How much food and government wealth would you like to spend on innovation:")
+  global food_resource
+  global government_wealth
+  global food_spend
+  global gov_weal_spend
+  food_spend = input("Food: ")
+  food_spllcheck()
+  food_spend = float(food_spend)
+  gov_weal_spend = input("Government Wealth: ")
+  gov_weal_spend_chck()
+  print_blanks()
+  gov_weal_spend = float(gov_weal_spend)
+  sucessrate = random.randint(15, 100)
+  sucessrate = float(sucessrate)
+  if vars_check(government_wealth, gov_weal_spend) == True:
+    return
+  if vars_check(food_resource, food_spend) == True:
+    return
+  if sucessrate <= 40:
+    print("The innovation was not a success")
+  elif sucessrate <= 70:
+    print("The innovation was a partial success")
+  elif sucessrate <= 100:
+    print("The innovation was a complete sucess")
+  sucessrate = sucessrate / 100
+  global population_happiness
+  global resource_diversity
+  food_resource -= food_spend
+  government_wealth -= gov_weal_spend
+  population_happiness += (food_spend + gov_weal_spend) * (sucessrate / 2)
+  resource_diversity += (food_spend + gov_weal_spend) * (sucessrate / 2)
+  print(" ")
+  print("Resource Diversity and Population Happiness were increased by " + str(((food_spend + gov_weal_spend) * (sucessrate / 2))) + "%")
+
+def food_spllcheck():
+  global food_spend
+  try:
+    float(food_spend)
+  except ValueError:
+    print("Please enter a number")
+    food_spend = input("Type here: ")
+    food_spllcheck()
+
+def gov_weal_spend_chck():
+  global gov_weal_spend
+  try:
+    float(gov_weal_spend)
+  except ValueError:
+    print("Please enter a number")
+    gov_weal_spend = input("Type here: ")
+    gov_weal_spend_chck()
+
+def accept_immigrants():
+  global inc_am
+  print('How much would you like to increase your population by?')
+  inc_am = input("Type here: ")
+  inc_am_check()
+  print_blanks()
+  inc_am = float(inc_am)
+  sucessra_te = random.randint(15, 100)
+  sucessra_te = float(sucessra_te)
+  if sucessra_te <= 40:
+    print("The immigration was not a success")
+  elif sucessra_te <= 70:
+    print("The immigration was a partial success")
+  elif sucessra_te <= 100:
+    print("The immigration was a complete sucess")
+  sucessra_te = sucessra_te / 100
+  
+  global government_wealth
+  global food_resource
+  global total_population
+  global foreign_relations
+
+  government_wealth -= inc_am * (1 - sucessra_te)
+  food_resource -= inc_am * sucessra_te
+  total_population += inc_am
+  foreign_relations += inc_am * sucessra_te
+
+  print("Food Resource and Foreign Relations were changed by " + str(inc_am * sucessra_te) + "%")
+  print("Government wealth was changed by " + str(inc_am * (1 - sucessra_te)) + "%")
+
+def inc_am_check():
+  global inc_am
+  try:
+    float(inc_am)
+  except ValueError:
+    print("Please enter a number")
+    inc_am = input("Type here: ")
+    inc_am_check()
+
+def gift():
+  global government_wealth
+  global gftamt
+  print("How much would you like to give?")
+  gftamt = input("Type here:")
+  gftamt_check()
+  gftamt = float(gftamt)
+  if vars_check(government_wealth, gftamt) == True:
+    return
+  print_blanks()
+  suces_sra_te = random.randint(15, 100)
+  suces_sra_te = float(suces_sra_te)
+  if suces_sra_te <= 40:
+    print("The gift was not a success")
+  elif suces_sra_te <= 70:
+    print("The gift was a partial success")
+  elif suces_sra_te <= 100:
+    print("The gift was a complete sucess")
+  suces_sra_te = suces_sra_te / 100
+  global foreign_relations
+  government_wealth -= gftamt
+  foreign_relations += gftamt * suces_sra_te
+  print("foreign relations were changed by " + str(gftamt * suces_sra_te) + "%")
+
+def gftamt_check():
+  global gftamt
+  try:
+
+    float(gftamt)
+  except ValueError:
+    print("Please enter a number")
+    gftamt = input("Type here: ")
+    gftamt_check()
+
+def deport_citizens():
+  global total_population
+  global decc_am
+  print('How much would you like to decrease your population by?')
+  decc_am = input("Type here: ")
+  decc_am_check()
+  decc_am = float(decc_am)
+  if vars_check(total_population, decc_am) == True:
+    return
+  print_blanks()
+  sucessra_te = random.randint(15, 100)
+  sucessra_te = float(sucessra_te)
+  if sucessra_te <= 40:
+    print("The deportation was not a success")
+  elif sucessra_te <= 70:
+    print("The deportation was a partial success")
+  elif sucessra_te <= 100:
+    print("The deportation was a complete sucess")
+  sucessra_te = sucessra_te / 100
+  
+  global government_wealth
+  global food_resource
+  global population_happiness
+  government_wealth += decc_am * sucessra_te
+  food_resource += decc_am * sucessra_te
+  total_population -= decc_am
+  population_happiness -= decc_am * (1 - sucessra_te)
+
+  print("Food Resource and Government wealth were changed by " + str(decc_am * sucessra_te) + "%")
+  print("Population Happiness was changed by " + str(decc_am * (1 - sucessra_te)) + "%")
+
+def decc_am_check():
+  global decc_am
+  try:
+    float(decc_am)
+  except ValueError:
+    print("Please enter a number")
+    decc_am = input("Type here: ")
+    decc_am_check()
+
+def draft_citizens():
+  global total_population
+  global draft_count
+  print("How many citizens would you like to draft?")
+  draft_count = input("Type here: ")
+  draft_count_check()
+  draft_count = float(draft_count)
+  if vars_check(total_population, draft_count) == True:
+    return
+  print_blanks()
+  sucessra_te = random.randint(15, 100)
+  sucessra_te = float(sucessra_te)
+  if sucessra_te <= 40:
+    print("The draft was not a success")
+  elif sucessra_te <= 70:
+    print("The draft was a partial success")
+  elif sucessra_te <= 100:
+    print("The draft was a complete sucess")
+  sucessra_te = sucessra_te / 100
+  global population_happiness
+  global military_might
+  total_population -= draft_count
+  population_happiness -= draft_count * abs(1-sucessra_te)
+  military_might += draft_count
+  print("total population and military might were changed by " + str(draft_count * sucessra_te) + "%")
+  print("Population Happiness was changed by " + str(draft_count * (1 - sucessra_te)) + "%")
+
+def draft_count_check():
+  global draft_count
+  try:
+    float(draft_count)
+  except ValueError:
+    print("Please enter a number")
+    draft_count = input("Type here: ")
+    draft_count_check()
+
+def hold_festival():
+  global government_wealth
+  global spend_amount
+  print("How much would you like to spend?")
+  spend_amount = input("Type here: ")
+  spend_amount_check()
+  spend_amount = float(spend_amount)
+  if vars_check(government_wealth, spend_amount) == True:
+    return
+  print_blanks()
+  sucessra_te = random.randint(15, 100)
+  sucessra_te = float(sucessra_te)
+  if sucessra_te <= 40:
+    print("The festival was not a success")
+  elif sucessra_te <= 70:
+    print("The festival was a partial success")
+  elif sucessra_te <= 100:
+    print("The festival was a complete sucess")
+  sucessra_te = sucessra_te / 100
+  global population_happiness
+  population_happiness += spend_amount * sucessra_te
+  government_wealth -= spend_amount
+  print("Population happiness was increased by " + str(spend_amount * sucessra_te) + "%")
+  print("Government wealth was decreased by " + str(spend_amount) + "%")
+
+def spend_amount_check():
+  global spend_amount
+  try:
+    float(spend_amount)
+  except ValueError:
+    print("Please enter a number")
+    spend_amount = input("Type here: ")
+    spend_amount_check()
+
+def tax_amount_check():
+  global tax_amount
+  try:
+    float(tax_amount)
+  except ValueError:
+    print("Please enter a number")
+    tax_amount = input("Type here: ")
+    tax_amount_check()
+
+def increase_taxes():
+  global tax_amount
+  global total_population
+  print("What percent of income would you like to tax?")
+  tax_amount = input("Type here: ")
+  tax_amount_check()
+  tax_amount = float(tax_amount)
+  if vars_check(total_population, tax_amount) == True:
+    return
+  print_blanks()
+  sucessra_te = random.randint(15, 100)
+  sucessra_te = float(sucessra_te)
+  if sucessra_te <= 40:
+    print("The taxes were not a success")
+  elif sucessra_te <= 70:
+    print("The taxes were a partial success")
+  elif sucessra_te <= 100:
+    print("The taxes were a complete sucess")
+  sucessra_te = sucessra_te / 100
+  global government_wealth
+  global population_happiness
+  population_happiness -= (tax_amount * (1-sucessra_te))
+  government_wealth += (tax_amount * (float(total_population)/100))
+  print("Government Wealth was increased by " + str(tax_amount * (float(total_population)/100)) + "%")
+  print("Population happiness was decreased by " + str(tax_amount * (1-sucessra_te)) + "%")
+
+def help_():
+  print('''Options:
+Subsidize Farming -> decrease government wealth, increase food
+Take land -> decrease military might, increase resource diversity proportional to previous military might, increase pop happiness, decrease foreign relations, increase government wealth.
+Import -> decrease government wealth, increase resource diversity or food
+Export -> decrease food or resource diversity, increase government wealth
+Take over country -> You attack one of the countries left. The higher your military might vs. theirs, the better chance you have to win. If you win, you gain 25% to every category but lose a percentage of military might proportional to neighbouring country\'s military might and 25% foreign relations. But if you lose, you'll lose 50% military might and resource diversity.
+Increase innovation -> decrease government wealth and food, increase resource diversity and population happiness
+Accept immigrants -> decrease food and government wealth, increase pop. and foreign_relations
+Gift -> decrease government wealth, increase foriegn relations
+Deport citizens -> decrease pop. and population happiness, increase food resource and government wealth
+Draft citizens -> decrease pop. and pop happiness, increase military might
+Hold festival -> decrease government wealth, increase population happiness
+Increase taxes -> decrease pop happiness, increase government wealth proportional to pop.
+''')
+  option_choice()
+
+
+
+
+
+
+def country_choice_spellcheck():
+  global mmcountry_1
+  global mmcountry_2
+  global mmcountry_3
+  global mmcountry_4
+  global country_choice
+  global country_used
+  testcasecountchoice = 0
+  if not(country_choice == "1" or country_choice == "2" or country_choice == "3" or country_choice == "4"):
+    print("Only type the integer, please.")
+    country_choice = input("Type here: ")
+    country_choice_spellcheck()
+  for x in countries_takeover:
+    if int(country_choice) == x:
+      testcasecountchoice = 1
+  if testcasecountchoice == 0:
+    print("You've already taken over that country! Please choose one from the list!")
+    country_choice = input("Type here: ")
+    country_choice_spellcheck()    
+  if country_choice == "1":
+    country_used = mmcountry_1
+  if country_choice == "2":
+    country_used = mmcountry_2
+  if country_choice == "3":
+    country_used = mmcountry_3
+  if country_choice == "4":
+    country_used = mmcountry_4
+
+
+#Take over country -> if military might is greater than neighbouring country, gain 25% to every category but lose % military might proportional to neighbouring country\'s military might vs. own and 25% foreign relations; else, lose 50% military might and resource diversity
+
+def sucess_chance():
+  global mmcountry_1
+  global mmcountry_2
+  global mmcountry_3
+  global mmcountry_4
+  global country_choice
+  global country_used
+  countdiff = military_might - country_used
+  if countdiff < 0:
+    countdiff = 12
+  elif countdiff < 20:
+    countdiff = 20
+  chanceroni = countdiff * random.randint(1,10)
+  country_used = chanceroni
+
+
+
+def take_over_country():
+  global mmcountry_1
+  global mmcountry_2
+  global mmcountry_3
+  global mmcountry_4
+  mmcountry_1 = random.randint(35, 100)
+  mmcountry_2 = random.randint(35, 100)
+  mmcountry_3 = random.randint(35, 100)
+  mmcountry_4 = random.randint(35, 100)
+  global countries_left
+  global population_happiness
+  global military_might
+  global food_resource
+  global foreign_relations
+  global total_population
+  global government_wealth
+  global resource_diversity
+  global country_choice
+  print("Which countries do you want to take over?")
+  for x in countries_takeover:
+    if x == 1:
+      print("The military might of country 1 is: " + str(mmcountry_1))
+    if x == 2: 
+      print("The military might of country 2 is: " + str(mmcountry_2))
+    if x == 3:
+      print("The military might of country 3 is: " + str(mmcountry_3))
+    if x == 4:
+      print("The military might of country 4 is: " + str(mmcountry_4))
+  country_choice = input("Type the number of the country in integer form here: ")
+  country_choice_spellcheck()
+  if country_choice == "1":
+    countries_takeover.remove(1)
+  if country_choice == "2":
+    countries_takeover.remove(2)
+  if country_choice == "3":
+    countries_takeover.remove(3)
+  if country_choice == "4":
+    countries_takeover.remove(4)
+  mm = country_used
+  sucess_chance()
+  print(country_used)
+  print_blanks()
+  if country_used > 100:
+    print("THE ATTACK WAS A SUCCESS!")
+    countries_left -= 1
+    population_happiness += 25
+    military_might -= mm
+    food_resource += 25
+    foreign_relations -= 25
+    total_population += 25
+    government_wealth += 25
+    resource_diversity +=25
+  else:
+    print("THE ATTACK WAS A FAILURE!")
+    military_might -= military_might
+    resource_diversity -= 50
+    if resource_diversity < 0:
+      resource_diversity = 0
+
+#####################################
+'BELOW ARE THE DISASTER choices'
+#####################################
+
+'''Disaster list:
+Starvation -> Low food: population decreases, happiness decreases
+Invasion -> Low military might and bad foreign relations: country is seized by outsiders, GAME OVER
+Natural disaster -> Low resource diversity: population decreases, happiness decreases
+Coup -> Low population happiness, Low military might: country is seized, GAME OVER
+Devolution -> Low population: pop. is too low so country reverts to farming society. GAME OVER
+Ousted -> Democratic -> Low happiness: Voted out of office, GAME OVER
+Ousted -> Dictatorship -> Low foriegn relations and low population happiness: country liberated, GAME OVER'''
+
+def chance_checker_one(cat):
+  chances = cat
+  action_chance = chances * random.randint(6,10)
+  if action_chance < 100:
+    return(True)
+
+def chance_checker_two(cat1, cat2):
+  chances = ((cat1 + cat2)/2)
+  action_chance = chances * random.randint(6,10)
+  if action_chance < 100:
+    return(True)
+
+def runThroughDisasterChances():
+  global countries_left
+  global population_happiness
+  global military_might
+  global food_resource
+  global foreign_relations
+  global total_population
+  global government_wealth
+  global resource_diversity
+  #Starvation
+  if chance_checker_one(food_resource) == True:
+    print("!!Starvation Occured!!")
+    population_happiness -= random.randint(10,20)
+    total_population -= random.randint(10,20)
+  #Invasion
+  if chance_checker_two(military_might, foreign_relations) == True:
+    print("!!Invasion Occured!!")
+    print("GAME OVER!")
+    sys.exit()
+  #Coup
+  if chance_checker_two(military_might, population_happiness) == True:
+    print("!!A Coup Occured!!")
+    print("GAME OVER!")
+    sys.exit()
+  #Devolution
+  if chance_checker_one(total_population) == True:
+    print("!!Devolution Occured!!")
+    print("GAME OVER!")
+    sys.exit()
+  #Ousted
+  if user_govstyle == "dictatorship":
+    if chance_checker_one(population_happiness) == True:
+      print("!!You have been ousted by a foreign country!!")
+      print("GAME OVER!")
+      sys.exit()
+  else:
+    if chance_checker_two(population_happiness, foreign_relations) == True:
+      print("!!You have been ousted by your own citizens!!")
+      print("GAME OVER!")
+      sys.exit()
+  #Natural Disaster
+  if chance_checker_one(resource_diversity) == True:
+    print("!!A Natural Disaster Occured!!")
+    population_happiness -= random.randint(10,20)
+    total_population -= random.randint(10,20)
+  
+def print_blanks():
+  blnk_cntr = 35
+  while blnk_cntr >= 0:
+    print(" ")
+    blnk_cntr -= 1
+
+def end_game():
+  if countries_left <= 0:
+    print("You Win")
+    sys.exit()
+
+def gameplay_overview():
+  print(" ")
+  print(" ")
+  display_stats()
+
+  option_choice()
+  display_stats()
+  option_choice()
+  runThroughDisasterChances()
+  gameplay_overview()
+
+def vars_check(i, x):
+  if (i - x) < 0:
+    print("You do not have enough to complete that action.")
+    option_choice()
+    return True
+    
+def screen():
+    #get all events
+    DISPLAYSURF = pygame.display.set_mode((500, 500))
+    for event in pygame.event.get():
+        if event.type == QUIT:
+            pygame.quit()
+            sys.exit()
+variables = [population_happiness, military_might, food_resource, foreign_relations, total_population, government_wealth, resource_diversity, countries_left]
+
+pygame.init()
+gameplay_overview()
 
