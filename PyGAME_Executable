@@ -926,12 +926,12 @@ def end_game():
 def gameplay_overview():
   print(" ")
   print(" ")
-  display_stats()
+  display_stats() #Sort This out to update the screen
 
-  option_choice()
+  option_choice() #Sort this to accept clicks as input instead of typing
   display_stats()
   option_choice()
-  runThroughDisasterChances()
+  runThroughDisasterChances() #Fix to change screen instead of printing phrase.
   gameplay_overview()
 
 def vars_check(i, x):
