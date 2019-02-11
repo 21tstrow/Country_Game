@@ -108,59 +108,6 @@ if user_econ == "communist" and user_govstyle == "dictatorship":
   government_wealth = 40
   resource_diversity = 60
 
-
-castle = """      -|             |-
-         -|                  [-_-_-_-_-_-_-_-]                  |-
-         [-_-_-_-_-]          |             |          [-_-_-_-_-]
-          | o   o |           [  0   0   0  ]           | o   o |
-           |     |    -|       |           |       |-    |     |
-           |     |_-___-___-___-|         |-___-___-___-_|     |
-           |  o  ]              [    0    ]              [  o  |
-           |     ]   o   o   o  [ _______ ]  o   o   o   [     | ----__________
-_____----- |     ]              [ ||||||| ]              [     |
-           |     ]              [ ||||||| ]              [     |
-       _-_-|_____]--------------[_|||||||_]--------------[_____|-_-_
-      ( (__________------------_____________-------------_________) )"""
-
-country_shape_small_compact = """
-  ________
- /        \\
-|   YOUR   |
-|  COUNTRY |
- \\________/
-"""
-
-country_shape_big_compact = """ 
-    ________________
-   /                \\
-  /                  \\
- /                    \\
-|         YOUR         |
-|        COUNTRY       |
- \\                    /
-  \\                  /
-   \\________________/
-"""
-
-country_shape_small_long = """ 
-  _________________
- /      YOUR       \\
-|      COUNTRY      |
- \\_________________/
-"""
-
-
-country_shape_big_long = """
-
-   _________________________
-  /                         \\
- /           YOUR            \\
-|           COUNTRY           |
-|                             |
- \\___________________________/
-"""
-
-
 options = ["subsidize farming", "take land", "import", "export", "take over country", "increase innovation", "accept immigrants", "gift", "deport citizens", "draft citizens", "hold festival", "increase taxes", "help"]
  
 
@@ -270,12 +217,11 @@ def farming_number_spellcheck():
     farming_number_spellcheck()
 
 def display_stats():
-  print(castle)
-  print(" ")
-  print(" ")
-  print(" ")
-  end_game()
-  print(" ")
+  #print(castle)
+  #print(" ")
+  #print(" ")
+  #end_game()
+  #print(" ")
   for i in stats:
     if i is int:
       i = float(i)
@@ -311,17 +257,25 @@ def display_values(VARIABLE):
     VARIABLE_LEVEL = 9 
   else:
     VARIABLE_LEVEL = 10
-
-  variable_squares = ""
+  VarXValue = 100
+  VarYValue = VARIABLE
+  #variable_squares = ""
   blank_squares = 10 - VARIABLE_LEVEL
   while VARIABLE_LEVEL > 0:
-    variable_squares += "# "
+ #   variable_squares += "# "
+    pygame.draw.rect(DISPLAYSURF, ( 200, 0, 0), (VarXValue, VarYValue, 50, 50))
+    VarXValue += 100
     VARIABLE_LEVEL -= 1
+    pygame.display.update()
   while blank_squares > 0:
-    variable_squares += "[] "
+ #   variable_squares += "[] "
+    pygame.draw.rect(DISPLAYSURF, ( 200, 200, 200), (VarXValue, VarYValue, 50, 50))
+    VarXValue += 100
     blank_squares -= 1
-  variable_squares += "----> " + str(VARIABLE) + "%"
-  print(variable_squares)
+    pygame.display.update()
+ # variable_squares += "----> " + str(VARIABLE) + "%"
+ # print(variable_squares)
+  
 
 def take_land():
   global military_might
@@ -931,7 +885,7 @@ def gameplay_overview():
   option_choice() #Sort this to accept clicks as input instead of typing
   display_stats()
   option_choice()
-  runThroughDisasterChances() #Fix to change screen instead of printing phrase.
+  runThroughDisasterChances()
   gameplay_overview()
 
 def vars_check(i, x):
@@ -950,5 +904,8 @@ def screen():
 variables = [population_happiness, military_might, food_resource, foreign_relations, total_population, government_wealth, resource_diversity, countries_left]
 
 pygame.init()
+DISPLAYSURF = pygame.display.set_mode((1500,1500))
+pygame.draw.rect(DISPLAYSURF, ( 200, 0, 0), (200, 200, 50, 50))
+pygame.display.update()
 gameplay_overview()
 
