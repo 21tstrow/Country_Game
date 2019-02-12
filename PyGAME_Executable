@@ -277,20 +277,20 @@ def display_values(VARIABLE):
     VARIABLE_LEVEL = 9 
   else:
     VARIABLE_LEVEL = 10
-  VarXValue = 100
-  VarYValue = VARIABLE
+  VarXValue = 500
+  VarYValue = 80
   #variable_squares = ""
   blank_squares = 10 - VARIABLE_LEVEL
   while VARIABLE_LEVEL > 0:
  #   variable_squares += "# "
-    pygame.draw.rect(DISPLAYSURF, ( 200, 0, 0), (VarXValue, VarYValue, 50, 50))
-    VarXValue += 100
+    pygame.draw.rect(DISPLAYSURF, ( 200, 0, 0), (VarXValue, VarYValue, 10, 10))
+    VarXValue += 20
     VARIABLE_LEVEL -= 1
     pygame.display.update()
   while blank_squares > 0:
  #   variable_squares += "[] "
-    pygame.draw.rect(DISPLAYSURF, ( 200, 200, 200), (VarXValue, VarYValue, 50, 50))
-    VarXValue += 100
+    pygame.draw.rect(DISPLAYSURF, ( 200, 200, 200), (VarXValue, VarYValue, 10, 10))
+    VarXValue += 20
     blank_squares -= 1
     pygame.display.update()
  # variable_squares += "----> " + str(VARIABLE) + "%"
@@ -924,8 +924,9 @@ def screen():
 variables = [population_happiness, military_might, food_resource, foreign_relations, total_population, government_wealth, resource_diversity, countries_left]
 
 pygame.init()
-DISPLAYSURF = pygame.display.set_mode((1500,1500))
-pygame.draw.rect(DISPLAYSURF, ( 200, 0, 0), (200, 200, 50, 50))
+DISPLAYSURF = pygame.display.set_mode((800,800))
+castle = pygame.image.load('//e042000h1/2021/21tstrow/My Documents/Python Programs/Images for Country_Game/Castle Graphic.png')
+DISPLAYSURF.blit(castle, (0,0))
 pygame.display.update()
 gameplay_overview()
 
