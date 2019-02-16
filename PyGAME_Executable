@@ -277,10 +277,26 @@ def display_values(VARIABLE):
     VARIABLE_LEVEL = 9 
   else:
     VARIABLE_LEVEL = 10
-  VarXValue = 500
-  VarYValue = 80
+  VarYValue = 140
+  if VARIABLE == population_happiness:
+    VarYValue = 78
+  if VARIABLE == military_might:
+    VarYvalue = 134
+  if VARIABLE == food_resource:
+    VarYValue = 185
+  if VARIABLE == foreign_relations:
+    VarYValue = 233
+  if VARIABLE == total_population:
+    VarYValue = 287
+  if VARIABLE == government_wealth:
+    VarYValue = 340
+  if VARIABLE == resource_diversity:
+    VarYValue = 394
+  if VARIABLE == countries_left:
+    VarYValue = 405
   #variable_squares = ""
   blank_squares = 10 - VARIABLE_LEVEL
+  VarXValue = 500
   while VARIABLE_LEVEL > 0:
  #   variable_squares += "# "
     pygame.draw.rect(DISPLAYSURF, ( 200, 0, 0), (VarXValue, VarYValue, 10, 10))
@@ -925,7 +941,7 @@ variables = [population_happiness, military_might, food_resource, foreign_relati
 
 pygame.init()
 DISPLAYSURF = pygame.display.set_mode((800,800))
-castle = pygame.image.load('//e042000h1/2021/21tstrow/My Documents/Python Programs/Images for Country_Game/Castle Graphic.png')
+castle = pygame.image.load('C:/Users/tucke/Pictures/Castle Graphic.png')
 DISPLAYSURF.blit(castle, (0,0))
 pygame.display.update()
 gameplay_overview()
