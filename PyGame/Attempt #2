@@ -19,18 +19,21 @@ button_positionsy = [100]
 button_positionsh = [50]
 button_colors = []
 done = False
+pygame.draw.rect(screen, WHITE,(100,100,50,50))
 while not done:
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                done = True
-
         #Cursor Sensing
         pygame.event.get()
         get_pos = pygame.mouse.get_pos()
         for i in range(len(button_positionsx)):
-            if get_pos > (button_positionsx[i], button_positionsy[i]) and get_pos < (button_positionsx[i] + button_positionsw[i], button_positionsy[i] - button_positionsh[i]):
-                button_colors[i]
+            if (get_pos > (button_positionsx[i], button_positionsy[i])) and (get_pos < (button_positionsx[i] + button_positionsw[i], button_positionsy[i] + button_positionsh[i])):
+                #button_colors[i]
+                print("yay")
+
+        pygame.display.update()
 
  
 pygame.quit()
