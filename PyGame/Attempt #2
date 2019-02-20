@@ -1,0 +1,42 @@
+import pygame
+
+#Colors
+BLACK = (0, 0, 0)
+WHITE = (255, 255, 255)
+BLUE = (0, 0, 255)
+GREEN = (0, 255, 0)
+RED = (255, 0, 0)
+PURPLE = (255, 0, 255)
+
+pygame.init()
+
+screen = pygame.display.set_mode([800,800])
+pygame.display.set_caption('Country Simulator')
+
+button_positionsx = [100]
+button_positionsw = [50]
+button_positionsy = [100]
+button_positionsh = [50]
+button_colors = []
+done = False
+while not done:
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+               done = True
+
+        #Cursor Sensing
+        pygame.event.get()
+        get_pos = pygame.mouse.get_pos()
+        for i in range(len(button_positionsx)):
+            if get_pos > (button_positionsx[i], button_positionsy[i]) and get_pos < (button_positionsx[i] + button_positionsw[i], button_positionsy[i] - button_positionsh[i]):
+                button_colors[i]
+
+ 
+pygame.quit()
+#Moving Logic
+#if event.type == pygame.KEYDOWN:
+    #if event.key == pygame.K_LEFT:
+        #player.changespeed(-5, 0)
+                
+
