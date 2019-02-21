@@ -48,11 +48,14 @@ while not done:
         #Cursor Sensing
         pygame.event.get()
         get_pos = pygame.mouse.get_pos()
+        print(get_pos)
         for i in range(len(button_positionsx)):
             button_colors[i] = GREEN
-            if (get_pos > (button_positionsx[i], button_positionsy[i])) and (get_pos < (button_positionsx[i] + button_positionsw[i], button_positionsy[i] + button_positionsh[i])):
+            mousex, mousey = get_pos
+            if (mousex > (button_positionsx[i]) and  (mousey > button_positionsy[i]) and (mousex < (button_positionsx[i] + button_positionsw[i])) and (mousey < button_positionsy[i] + button_positionsh[i])):
                 button_colors[i] = BLUE
                 print("yay")
+                print(get_pos)
 
         pygame.display.update()
         
