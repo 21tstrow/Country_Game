@@ -25,6 +25,7 @@ def runfxn(fxnnum):
         
 def dispfxn(fxnnum):
     if fxnnum == 0:
+        print("yaya")
         #Display fxn in info tab
 
 myfont = pygame.font.SysFont('Comic Sans MS', 30)
@@ -48,6 +49,7 @@ while not done:
         pygame.event.get()
         get_pos = pygame.mouse.get_pos()
         for i in range(len(button_positionsx)):
+            button_colors[i] = GREEN
             if (get_pos > (button_positionsx[i], button_positionsy[i])) and (get_pos < (button_positionsx[i] + button_positionsw[i], button_positionsy[i] + button_positionsh[i])):
                 button_colors[i] = BLUE
                 print("yay")
@@ -55,9 +57,9 @@ while not done:
         pygame.display.update()
         
         for i in range(len(button_positionsx)):
-            if (button_colors[i] == BLUE) and (pygame.mouse.get_pressed() == (True, False, False):
+            if (button_colors[i] == BLUE) and (pygame.mouse.get_pressed() == (True, False, False)):
                 runfxn(i)
-            elif (button_colors[i] == BLUE) and (pygame.mouse.get_pressed() == (False, False, False):
+            elif (button_colors[i] == BLUE) and (pygame.mouse.get_pressed() == (False, False, False)):
                 dispfxn(i)
  
         #Display the Buttons
