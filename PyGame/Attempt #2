@@ -1,5 +1,5 @@
 import pygame
-
+from pygame.locals import *
 #Colors
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
@@ -17,7 +17,26 @@ button_positionsx = [100]
 button_positionsw = [50]
 button_positionsy = [100]
 button_positionsh = [50]
-button_colors = []
+button_colors = [GREEN]
+
+def runfxn(fxnnum):
+    if fxnnum == 0:
+        subsidize_farming()
+        
+def dispfxn(fxnnum):
+    if fxnnum == 0:
+        #Display fxn in info tab
+
+myfont = pygame.font.SysFont('Comic Sans MS', 30)
+#textsurface = myfont.render('Some Text', False, (0, 0, 0)) #Text Here
+#screen.blit(textsurface,(0,0))
+
+subfarmtext = myfont.render('Subsidise Farming', False, (0, 0, 0))
+
+fxn_texts = [subfarmtext]
+
+
+
 done = False
 pygame.draw.rect(screen, WHITE,(100,100,50,50))
 while not done:
@@ -30,13 +49,25 @@ while not done:
         get_pos = pygame.mouse.get_pos()
         for i in range(len(button_positionsx)):
             if (get_pos > (button_positionsx[i], button_positionsy[i])) and (get_pos < (button_positionsx[i] + button_positionsw[i], button_positionsy[i] + button_positionsh[i])):
-                #button_colors[i]
+                button_colors[i] = BLUE
                 print("yay")
 
         pygame.display.update()
-
+        
+        for i in range(len(button_positionsx)):
+            if (button_colors[i] == BLUE) and (pygame.mouse.get_pressed() == (True, False, False):
+                runfxn(i)
+            elif (button_colors[i] == BLUE) and (pygame.mouse.get_pressed() == (False, False, False):
+                dispfxn(i)
+ 
+        #Display the Buttons
+        for i in range(len(button_positionsx)):
+            pygame.draw.rect(screen, button_colors[i], (button_positionsx[i], button_positionsy[i], button_positionsw[i], button_positionsh[i]))
+ 
+ 
  
 pygame.quit()
+
 #Moving Logic
 #if event.type == pygame.KEYDOWN:
     #if event.key == pygame.K_LEFT:
