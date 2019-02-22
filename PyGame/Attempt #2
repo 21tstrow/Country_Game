@@ -82,7 +82,7 @@ button_colors = [RED2, RED2, RED2, RED2, RED2, RED2, RED2, RED2, RED2, RED2, RED
 'Functions'
 ###############
 
-def subsidise_farming():
+def subsidize_farming():
   global government_wealth
   global food_resource
   #print "What percentage of government wealth would you like to invest into farming?"
@@ -91,10 +91,13 @@ def subsidise_farming():
   #^^^Define^^^#
   if sucess_rate <= 40:
     #display Subsidies failed
+      print(1)
   elif sucess_rate <= 70:
     #Display subsidies were somewhat effective
+    print(1)
   elif sucess_rate <= 100:
     #Display subsidies were somewhat effective
+    print(1)
   new_percentage = farming_number * (sucess_rate / 100)
   food_resource += new_percentage
   government_wealth -= farming_number 
@@ -105,6 +108,38 @@ def subsidise_farming():
 'End Fuctions'
 ##############
 
+
+def enter_number(variable):
+    numberkeycolors = [WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE]
+    number_positionsx = [100, 100, 100, 300, 300, 300, 300, 500, 500, 500]
+    number_positionsy = [100, 300, 500, 100, 300, 500, 700, 100, 300, 500]
+    number_positionsw = [175, 175, 175, 175, 175, 175, 175, 175, 175, 175]
+    number_positionsh = [175, 175, 175, 175, 175, 175, 175, 175, 175, 175]
+    numkeydone = True
+    #load number grid
+    while numkeydone:
+        pygame.event.get()
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+               done = True
+               numkeydone = False
+        get_pos = pygame.mouse.get_pos()
+        for i in range(len(number_positionsx)):
+            numberkeycolors[i] = WHITE
+            mousesx, mousesy = get_pos
+            print(get_pos)
+            if (mousesx > (number_positionsx[i]) and  (mousesy > number_positionsy[i]) and (mousesx < (number_positionsx[i] + number_positionsw[i])) and (mousesy < number_positionsy[i] + number_positionsh[i])):
+                numberkeycolors[i] = BLACK
+                print('Yay')
+        pygame.display.update()
+        for i in range(len(number_positionsx)):
+            if (numberkeycolors[i] == BLACK) and (pygame.mouse.get_pressed() == (True, False, False)):
+                numkeydone = False
+                runnums(i)
+        #Display the Buttons
+        for i in range(len(number_positionsx)):
+            pygame.draw.rect(screen, numberkeycolors[i], (number_positionsx[i], number_positionsy[i], number_positionsw[i], number_positionsh[i]))
+            pygame.display.update()
 
 
 
