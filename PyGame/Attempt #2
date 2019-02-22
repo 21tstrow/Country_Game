@@ -78,6 +78,38 @@ button_positionsy = [535, 535, 535, 535, 535, 535, 655, 655, 655, 655, 655, 655]
 button_positionsh = [70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70]
 button_colors = [RED2, RED2, RED2, RED2, RED2, RED2, RED2, RED2, RED2, RED2, RED2, RED2]
 
+###############
+'Functions'
+###############
+
+def subsidise_farming():
+  global government_wealth
+  global food_resource
+  #print "What percentage of government wealth would you like to invest into farming?"
+  #^^'Solve on Screen'^^^
+  farming_number = enter_number(government_wealth)
+  #^^^Define^^^#
+  if sucess_rate <= 40:
+    #display Subsidies failed
+  elif sucess_rate <= 70:
+    #Display subsidies were somewhat effective
+  elif sucess_rate <= 100:
+    #Display subsidies were somewhat effective
+  new_percentage = farming_number * (sucess_rate / 100)
+  food_resource += new_percentage
+  government_wealth -= farming_number 
+  #Display Changes ^^^
+
+
+##############
+'End Fuctions'
+##############
+
+
+
+
+
+
 def runfxn(c):
     if c == 0:
         subsidize_farming()
