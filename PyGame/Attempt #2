@@ -26,6 +26,7 @@ Increase taxes -> decrease pop happiness, increase government wealth proportiona
 '''
 population_happiness = 30
 military_might = 80
+
 food_resource = 25
 foreign_relations = 30
 total_population = 35
@@ -61,7 +62,7 @@ def print_squares(x, y, value):
         if value > 0:
             pygame.draw.rect(screen, RED2, (xval, yval, 10, 10))
         if value <= 0:
-            pygame.draw.rect(screen, PINK, (xval, yval, 10, 10))
+            pygame.draw.rect(screen, WHITE, (xval, yval, 10, 10))
         value -= 10
         xval += 20
     
@@ -77,9 +78,32 @@ button_positionsy = [535, 535, 535, 535, 535, 535, 655, 655, 655, 655, 655, 655]
 button_positionsh = [70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70]
 button_colors = [RED2, RED2, RED2, RED2, RED2, RED2, RED2, RED2, RED2, RED2, RED2, RED2]
 
-def runfxn(fxnnum):
-    if fxnnum == 0:
+def runfxn(c):
+    if c == 0:
         subsidize_farming()
+    if c == 1:
+        take_land()
+    if c == 2:
+        import_()
+    if c == 3:
+        export()
+    if c == 4:
+        take_over_country()
+    if c == 5:
+        increase_innovation()
+    if c == 6:
+        accept_immigrants()
+    if c == 7:
+        gift()
+    if c == 8:
+        deport_citizens()
+    if c == 9:
+        draft_citizes()
+    if c == 10:
+        hold_festival()
+    if c == 11:
+        increase_taxes()
+        
         
 def dispfxn(fxnnum):
     if fxnnum == 0:
@@ -118,9 +142,9 @@ while not done:
         pygame.display.update()
         
         for i in range(len(button_positionsx)):
-            if (button_colors[i] == BLUE) and (pygame.mouse.get_pressed() == (True, False, False)):
+            if (button_colors[i] == PINK) and (pygame.mouse.get_pressed() == (True, False, False)):
                 runfxn(i)
-            elif (button_colors[i] == BLUE) and (pygame.mouse.get_pressed() == (False, False, False)):
+            elif (button_colors[i] == PINK) and (pygame.mouse.get_pressed() == (False, False, False)):
                 dispfxn(i)
  
         #Display the Buttons
