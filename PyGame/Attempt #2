@@ -108,38 +108,87 @@ def subsidize_farming():
 'End Fuctions'
 ##############
 
+def dispnum():
+    numfont = pygame.font.SysFont('Times New Roman', 80)
+    num1 = numfont.render('1', False, (100, 100, 100)) #Text Here
+    num2 = numfont.render('2', False, (100, 100, 100))
+    num3 = numfont.render('3', False, (100, 100, 100))
+    num4 = numfont.render('4', False, (100, 100, 100))
+    num5 = numfont.render('5', False, (100, 100, 100))
+    num6 = numfont.render('6', False, (100, 100, 100))
+    num7 = numfont.render('7', False, (100, 100, 100))
+    num8 = numfont.render('8', False, (100, 100, 100))
+    num9 = numfont.render('9', False, (100, 100, 100))
+    num0 = numfont.render('0', False, (100, 100, 100))
+    screen.blit(num1,(165, 135))
+    screen.blit(num2,(365,135))
+    screen.blit(num3,(565,135))
+    screen.blit(num4,(165,335))
+    screen.blit(num5,(365,335))
+    screen.blit(num6,(565,335))
+    screen.blit(num7,(165,535))
+    screen.blit(num8,(365,535))
+    screen.blit(num9,(565,535))
+    screen.blit(num0,(365,735))
+
+def runnums(pressed):
+    global numberused
+    if pressed == 0:
+        numberused += "1"
+    if pressed == 1:
+        numberused += "4"
+    if pressed == 2:
+        numberused += "7"
+    if pressed == 3:
+        numberused += "2"
+    if pressed == 4:
+        numberused += "5"
+    if pressed == 5:
+        numberused += "8"
+    if pressed == 6:
+        numberused += "0"
+    if pressed == 7:
+        numberused += "3"
+    if pressed == 8:
+        numberused += "6"
+    if pressed == 9:
+        numberused += "9"
+    print(numberused)
+    pygame.time.wait(250)
+    
 
 def enter_number(variable):
+    global numberused
+    numberused = ""
     numberkeycolors = [WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE]
     number_positionsx = [100, 100, 100, 300, 300, 300, 300, 500, 500, 500]
     number_positionsy = [100, 300, 500, 100, 300, 500, 700, 100, 300, 500]
     number_positionsw = [175, 175, 175, 175, 175, 175, 175, 175, 175, 175]
     number_positionsh = [175, 175, 175, 175, 175, 175, 175, 175, 175, 175]
-    numkeydone = True
+    numkeydone = False
+    pygame.draw.rect(screen, (100,100,100), (0,0,800,800))
     #load number grid
-    while numkeydone:
+    while not numkeydone:
         pygame.event.get()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                done = True
-               numkeydone = False
+               numkeydone = True
         get_pos = pygame.mouse.get_pos()
         for i in range(len(number_positionsx)):
             numberkeycolors[i] = WHITE
             mousesx, mousesy = get_pos
-            print(get_pos)
             if (mousesx > (number_positionsx[i]) and  (mousesy > number_positionsy[i]) and (mousesx < (number_positionsx[i] + number_positionsw[i])) and (mousesy < number_positionsy[i] + number_positionsh[i])):
                 numberkeycolors[i] = BLACK
-                print('Yay')
         pygame.display.update()
         for i in range(len(number_positionsx)):
             if (numberkeycolors[i] == BLACK) and (pygame.mouse.get_pressed() == (True, False, False)):
-                numkeydone = False
                 runnums(i)
         #Display the Buttons
         for i in range(len(number_positionsx)):
             pygame.draw.rect(screen, numberkeycolors[i], (number_positionsx[i], number_positionsy[i], number_positionsw[i], number_positionsh[i]))
-            pygame.display.update()
+        dispnum()
+        pygame.display.update()
 
 
 
