@@ -1,5 +1,6 @@
 import pygame
 from pygame.locals import *
+import random
 #Colors
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
@@ -85,10 +86,13 @@ button_colors = [RED2, RED2, RED2, RED2, RED2, RED2, RED2, RED2, RED2, RED2, RED
 def subsidize_farming():
   global government_wealth
   global food_resource
+  global numphrase
+  numphrase = "How much would you like to spend on Subsidies?:"
   #print "What percentage of government wealth would you like to invest into farming?"
   #^^'Solve on Screen'^^^
-  farming_number = enter_number(government_wealth)
+  farming_number = str(enter_number(government_wealth))
   #^^^Define^^^#
+  sucess_rate = float(random.randint(1, 100))
   if sucess_rate <= 40:
     #display Subsidies failed
       print(1)
@@ -98,7 +102,8 @@ def subsidize_farming():
   elif sucess_rate <= 100:
     #Display subsidies were somewhat effective
     print(1)
-  new_percentage = farming_number * (sucess_rate / 100)
+  farming_number = int(farming_number)
+  new_percentage = float(farming_number) * (sucess_rate / 100)
   food_resource += new_percentage
   government_wealth -= farming_number 
   #Display Changes ^^^
@@ -109,7 +114,10 @@ def subsidize_farming():
 ##############
 
 def dispnum():
+    global numphrase
+    global numberused
     numfont = pygame.font.SysFont('Times New Roman', 80)
+    phrfont = pygame.font.SysFont('Times New Roman', 30)
     num1 = numfont.render('1', False, (100, 100, 100)) #Text Here
     num2 = numfont.render('2', False, (100, 100, 100))
     num3 = numfont.render('3', False, (100, 100, 100))
@@ -120,6 +128,9 @@ def dispnum():
     num8 = numfont.render('8', False, (100, 100, 100))
     num9 = numfont.render('9', False, (100, 100, 100))
     num0 = numfont.render('0', False, (100, 100, 100))
+    enter = phrfont.render('Enter', False, (100, 100, 100))
+    current = phrfont.render(numberused, False, BLACK)
+    phraseused = phrfont.render(numphrase, False, WHITE)
     screen.blit(num1,(165, 135))
     screen.blit(num2,(365,135))
     screen.blit(num3,(565,135))
@@ -130,8 +141,11 @@ def dispnum():
     screen.blit(num8,(365,535))
     screen.blit(num9,(565,535))
     screen.blit(num0,(365,735))
+    screen.blit(current, (640, 25))
+    screen.blit(phraseused, (25, 25))
 
 def runnums(pressed):
+    global numkeydone
     global numberused
     if pressed == 0:
         numberused += "1"
@@ -153,18 +167,21 @@ def runnums(pressed):
         numberused += "6"
     if pressed == 9:
         numberused += "9"
+    if pressed == 10:
+        numkeydone = True
     print(numberused)
     pygame.time.wait(250)
     
 
 def enter_number(variable):
+    global numkeydone
     global numberused
     numberused = ""
-    numberkeycolors = [WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE]
-    number_positionsx = [100, 100, 100, 300, 300, 300, 300, 500, 500, 500]
-    number_positionsy = [100, 300, 500, 100, 300, 500, 700, 100, 300, 500]
-    number_positionsw = [175, 175, 175, 175, 175, 175, 175, 175, 175, 175]
-    number_positionsh = [175, 175, 175, 175, 175, 175, 175, 175, 175, 175]
+    numberkeycolors = [WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE]
+    number_positionsx = [100, 100, 100, 300, 300, 300, 300, 500, 500, 500, 500]
+    number_positionsy = [100, 300, 500, 100, 300, 500, 700, 100, 300, 500, 700]
+    number_positionsw = [175, 175, 175, 175, 175, 175, 175, 175, 175, 175, 175]
+    number_positionsh = [175, 175, 175, 175, 175, 175, 175, 175, 175, 175, 175]
     numkeydone = False
     pygame.draw.rect(screen, (100,100,100), (0,0,800,800))
     #load number grid
