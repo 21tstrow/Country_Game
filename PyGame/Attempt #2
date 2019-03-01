@@ -104,8 +104,7 @@ def subsidize_farming():
       screen.blit(pygame.image.load('C:/Users/tucke/Pictures/subsidies not success.png'), (0,0))
       pygame.display.update()
   elif sucess_rate <= 70:
-    #Display subsidies were somewhat effective
-    print(3)
+    screen.blit(pygame.image.load('C:/Users/tucke/Pictures/Subsidies Partial.png'), (0,0))
   elif sucess_rate <= 100:
       screen.blit(pygame.image.load('C:/Users/tucke/Pictures/Subsidies were a success.png'), (0,0))
       pygame.display.update()
@@ -123,13 +122,13 @@ def take_land():
   military_divert = float(military_divert)
   successness = random.randint(7,50)
   if successness <= 15:
-    screen.blit(pygame.image.load(''))##################
+    screen.blit(pygame.image.load('C:/Users/tucke/Pictures/Take Land Failure.png'),(0,0))
     pygame.display.update()
   elif successness <= 35:
-    screen.blit(pygame.image.load(''))##################
+    screen.blit(pygame.image.load('C:/Users/tucke/Pictures/Take Land Partial.png'),(0,0))
     pygame.display.update()
   elif successness <= 50:
-    screen.blit(pygame.image.load(''))##################
+    screen.blit(pygame.image.load('C:/Users/tucke/Pictures/Take Land Success.png'),(0,0))
     pygame.display.update()
   
   take_percentage = military_divert * successness / 100
@@ -540,7 +539,6 @@ subfarmtext = myfont.render('Subsidise Farming', False, (0, 0, 0))
 fxn_texts = [subfarmtext]
 
 castle = pygame.image.load('C:/Users/tucke/Pictures/Castle Graphic.png')
-
 
 done = False
 pygame.draw.rect(screen, WHITE,(100,100,50,50))
