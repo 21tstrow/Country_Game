@@ -11,6 +11,12 @@ PURPLE = (255, 0, 255)
 RED2 = (200, 50, 50)
 PINK = (250, 150, 150)
 
+#images
+global susuc
+global subfail
+
+subsuc = pygame.image.load('C:/Users/tucke/Pictures/Subsidies were a success.png')
+subfail = pygame.image.load('C:/Users/tucke/Pictures/subsidies not success.png')
 '''
 Subsidize Farming -> decrease government wealth, increase food
 Take land -> decrease military might, increase resource diversity proportional to previous military might, increase pop happiness, decrease foreign relations, increase government wealth.
@@ -84,28 +90,32 @@ button_colors = [RED2, RED2, RED2, RED2, RED2, RED2, RED2, RED2, RED2, RED2, RED
 ###############
 
 def subsidize_farming():
+  subsuc = pygame.image.load('C:/Users/tucke/Pictures/Subsidies were a success.png')
+  subfail = pygame.image.load('C:/Users/tucke/Pictures/subsidies not success.png')
+  global castle
   global government_wealth
   global food_resource
   global numphrase
   numphrase = "How much would you like to spend on Subsidies?:"
   #print "What percentage of government wealth would you like to invest into farming?"
   #^^'Solve on Screen'^^^
-  farming_number = str(enter_number(government_wealth))
+  farming_number = enter_number(government_wealth)
+  farming_number = int(farming_number)
   #^^^Define^^^#
   sucess_rate = float(random.randint(1, 100))
   if sucess_rate <= 40:
-    #display Subsidies failed
-      print(1)
+      screen.blit(pygame.image.load('C:/Users/tucke/Pictures/subsidies not success.png'), (0,0))
+      pygame.display.update()
   elif sucess_rate <= 70:
     #Display subsidies were somewhat effective
-    print(1)
+    print(3)
   elif sucess_rate <= 100:
-    #Display subsidies were somewhat effective
-    print(1)
+      screen.blit(pygame.image.load('C:/Users/tucke/Pictures/Subsidies were a success.png'), (0,0))
+      pygame.display.update()
   farming_number = int(farming_number)
   new_percentage = float(farming_number) * (sucess_rate / 100)
   food_resource += new_percentage
-  government_wealth -= farming_number 
+  government_wealth -= farming_number
   #Display Changes ^^^
 
 
@@ -206,6 +216,7 @@ def enter_number(variable):
             pygame.draw.rect(screen, numberkeycolors[i], (number_positionsx[i], number_positionsy[i], number_positionsw[i], number_positionsh[i]))
         dispnum()
         pygame.display.update()
+    return numberused
 
 
 
@@ -236,6 +247,8 @@ def runfxn(c):
         hold_festival()
     if c == 11:
         increase_taxes()
+    pygame.time.wait(2000)
+    screen.blit(castle, (0,0))
         
         
 def dispfxn(fxnnum):
