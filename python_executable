@@ -681,31 +681,42 @@ def tax_amount_check():
     float(tax_amount)
   except ValueError:
     print "Please enter a number"
-import pygame
-from pygame.locals import *
-import random
-#Colors
-BLACK = (0, 0, 0)
-WHITE = (255, 255, 255)
-BLUE = (0, 0, 255)
-GREEN = (0, 255, 0)
-RED = (255, 0, 0)
-PURPLE = (255, 0, 255)
-RED2 = (200, 50, 50)
-PINK = (250, 150, 150)
+    tax_amount = raw_input("Type here: ")
+    tax_amount_check()
 
-#images
-global susuc
-global subfail
+def increase_taxes():
+  global tax_amount
+  global total_population
+  print "What percent of income would you like to tax?"
+  tax_amount = raw_input("Type here: ")
+  tax_amount_check()
+  tax_amount = float(tax_amount)
+  if vars_check(total_population, tax_amount) == True:
+    return
+  print_blanks()
+  sucessra_te = random.randint(15, 100)
+  sucessra_te = float(sucessra_te)
+  if sucessra_te <= 40:
+    print "The taxes were not a success"
+  elif sucessra_te <= 70:
+    print "The taxes were a partial success"
+  elif sucessra_te <= 100:
+    print "The taxes were a complete sucess"
+  sucessra_te = sucessra_te / 100
+  global government_wealth
+  global population_happiness
+  population_happiness -= (tax_amount * (1-sucessra_te))
+  government_wealth += (tax_amount * (float(total_population)/100))
+  print "Government Wealth was increased by " + str(tax_amount * (float(total_population)/100)) + "%"
+  print "Population happiness was decreased by " + str(tax_amount * (1-sucessra_te)) + "%"
 
-subsuc = pygame.image.load('C:/Users/tucke/Pictures/Subsidies were a success.png')
-subfail = pygame.image.load('C:/Users/tucke/Pictures/subsidies not success.png')
-'''
+def help_():
+  print '''Options:
 Subsidize Farming -> decrease government wealth, increase food
 Take land -> decrease military might, increase resource diversity proportional to previous military might, increase pop happiness, decrease foreign relations, increase government wealth.
 Import -> decrease government wealth, increase resource diversity or food
 Export -> decrease food or resource diversity, increase government wealth
-Take over country -> if military might is greater than neighbouring country, gain 25% to every category but lose % military might proportional to neighbouring country's military might vs. own and 25% foreign relations; else, lose 50% military might and resource diversity
+Take over country -> You attack one of the countries left. The higher your military might vs. theirs, the better chance you have to win. If you win, you gain 25% to every category but lose a percentage of military might proportional to neighbouring country\'s military might and 25% foreign relations. But if you lose, you'll lose 50% military might and resource diversity.
 Increase innovation -> decrease government wealth and food, increase resource diversity and population happiness
 Accept immigrants -> decrease food and government wealth, increase pop. and foreign_relations
 Gift -> decrease government wealth, increase foriegn relations
@@ -714,558 +725,21 @@ Draft citizens -> decrease pop. and pop happiness, increase military might
 Hold festival -> decrease government wealth, increase population happiness
 Increase taxes -> decrease pop happiness, increase government wealth proportional to pop.
 '''
-population_happiness = 30
-military_might = 80
-
-food_resource = 25
-foreign_relations = 30
-total_population = 35
-government_wealth = 50
-resource_diversity = 40
-
-variables = [population_happiness, military_might, food_resource, foreign_relations, total_population, government_wealth, resource_diversity]
-
-def display_values():
-    for var in variables:
-        if var == population_happiness:
-            print_squares(500, 75, population_happiness)
-        if var == military_might:
-            print_squares(500, 125, military_might)
-        if var == food_resource:
-            print_squares(500, 180, food_resource)
-        if var == foreign_relations:
-            print_squares(500, 235, foreign_relations)
-        if var == total_population:
-            print_squares(500, 290, total_population)
-        if var == government_wealth:
-            print_squares(500, 340, government_wealth)
-        if var == resource_diversity:
-            print_squares(500, 395, resource_diversity)
-
-        
-def print_squares(x, y, value):
-    tempval = value
-
-    xval = x
-    yval = y
-    for i in range(10):
-        if value > 0:
-            pygame.draw.rect(screen, RED2, (xval, yval, 10, 10))
-        if value <= 0:
-            pygame.draw.rect(screen, WHITE, (xval, yval, 10, 10))
-        value -= 10
-        xval += 20
-    
-
-pygame.init()
-
-screen = pygame.display.set_mode([800,800])
-pygame.display.set_caption('Country Simulator')
-
-button_positionsx = [10, 145, 280, 415, 550, 685, 10, 145, 280, 415, 550, 685]
-button_positionsw = [90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90]
-button_positionsy = [535, 535, 535, 535, 535, 535, 655, 655, 655, 655, 655, 655]
-button_positionsh = [70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70]
-button_colors = [RED2, RED2, RED2, RED2, RED2, RED2, RED2, RED2, RED2, RED2, RED2, RED2]
-
-###############
-'Functions'
-###############
-
-def subsidize_farming():
-  subsuc = pygame.image.load('C:/Users/tucke/Pictures/Subsidies were a success.png')
-  subfail = pygame.image.load('C:/Users/tucke/Pictures/subsidies not success.png')
-  global castle
-  global government_wealth
-  global food_resource
-  global numphrase
-  numphrase = "How much would you like to spend on Subsidies?:"
-  farming_number = enter_number(government_wealth)
-  farming_number = int(farming_number)
-  sucess_rate = float(random.randint(1, 100))
-  if sucess_rate <= 40:
-      screen.blit(pygame.image.load('C:/Users/tucke/Pictures/subsidies not success.png'), (0,0))
-      pygame.display.update()
-  elif sucess_rate <= 70:
-    #Display subsidies were somewhat effective
-    print(3)
-  elif sucess_rate <= 100:
-      screen.blit(pygame.image.load('C:/Users/tucke/Pictures/Subsidies were a success.png'), (0,0))
-      pygame.display.update()
-  farming_number = int(farming_number)
-  new_percentage = float(farming_number) * (sucess_rate / 100)
-  food_resource += new_percentage
-  government_wealth -= farming_number
-
-def take_land():
-  global military_might
-  global military_divert
-  global numphrase
-  numphrase = "What percentage of your military power will you devert to capturing and defending land?"
-  military_divert = enter_number(military_might)
-  military_divert = float(military_divert)
-  successness = random.randint(7,50)
-  if successness <= 15:
-    screen.blit(pygame.image.load(''))##################
-    pygame.display.update()
-  elif successness <= 35:
-    screen.blit(pygame.image.load(''))##################
-    pygame.display.update()
-  elif successness <= 50:
-    screen.blit(pygame.image.load(''))##################
-    pygame.display.update()
-  
-  take_percentage = military_divert * successness / 100
-  global population_happiness
-  global foreign_relations
-  global government_wealth
-  global resource_diversity
-  population_happiness += take_percentage
-  military_might -= military_divert
-  foreign_relations -= take_percentage
-  government_wealth += take_percentage
-  resource_diversity += take_percentage
-  
-def import_():
-  global government_wealth
-  global user_import
-  global user_spend
-  global food_resource
-  global resource_diversity
-  global numphrase
-  user_import = chose_two("food", "resources")
-  numphrase = "How much government wealth would you like to spend?"
-  user_spend = enter_number(government_wealth)
-  user_spend = float(user_spend)
-  government_wealth -= user_spend
-  if user_import == "food":
-    food_resource += user_spend
-  if user_import == "resources":
-    resource_diversity += user_spend
-
-def export():
-  global user_export
-  global user_trade
-  global food_resource
-  global resource_diversity
-  numphrase = "How much would you like to export?"
-  user_export = chose_two("food", "resources")
-  chosen = chose_two("food", "resources")
-  if chosen == "food":
-      chosen = food_resource
-  else:
-      chosen = resource_diversity
-  user_trade = enter_number(chosen)
-  user_trade = float(user_trade)
-  global government_wealth
-  government_wealth += user_trade
-  if user_export == "food":
-    food_resource -= user_trade
-  if user_export == "resources":
-    resource_diversity -= user_trade
-
-def increase_innovation():
-  global numphrase
-  numphrase = "How much food and government wealth would you like to spend on innovation:"
-  global food_resource
-  global government_wealth
-  global food_spend
-  global gov_weal_spend
-  numphrase = "How much food would you like to spend on innovation"
-  food_spend = enter_number(food_resource)
-  food_spend = float(food_spend)
-  numphrase = "How much government wealth would you like to spend on innovation:"
-  gov_weal_spend = enter_number(government_wealth)
-  gov_weal_spend = float(gov_weal_spend)
-  sucessrate = random.randint(15, 100)
-  sucessrate = float(sucessrate)
-  if sucessrate <= 40:
-    screen.blit(pygame.image.load(''))##################
-    pygame.display.update()
-  elif sucessrate <= 70:
-    screen.blit(pygame.image.load(''))##################
-    pygame.display.update()
-  elif sucessrate <= 100:
-    screen.blit(pygame.image.load(''))##################
-    pygame.display.update()
-  sucessrate = sucessrate / 100
-  global population_happiness
-  global resource_diversity
-  food_resource -= food_spend
-  government_wealth -= gov_weal_spend
-  population_happiness += (food_spend + gov_weal_spend) * (sucessrate / 2)
-  resource_diversity += (food_spend + gov_weal_spend) * (sucessrate / 2)
-
-def accept_immigrants():
-  global inc_am
-  numphrase = 'How much would you like to increase your population by?'
-  inc_am = enter_number(False)
-  inc_am = float(inc_am)
-  sucessra_te = random.randint(15, 100)
-  sucessra_te = float(sucessra_te)
-  if sucessra_te <= 40:
-    screen.blit(pygame.image.load(''))##################
-    pygame.display.update()
-  elif sucessra_te <= 70:
-    screen.blit(pygame.image.load(''))##################
-    pygame.display.update()
-  elif sucessra_te <= 100:
-    screen.blit(pygame.image.load(''))##################
-    pygame.display.update()
-  sucessra_te = sucessra_te / 100
-  
-  global government_wealth
-  global food_resource
-  global total_population
-  global foreign_relations
-
-  government_wealth -= inc_am * (1 - sucessra_te)
-  food_resource -= inc_am * sucessra_te
-  total_population += inc_am
-  foreign_relations += inc_am * sucessra_te
-
-def gift():
-  global government_wealth
-  global gftamt
-  numphrase = "How much would you like to give?"
-  gftamt = enter_number(government_wealth)
-  gftamt = float(gftamt)
-  suces_sra_te = random.randint(15, 100)
-  suces_sra_te = float(suces_sra_te)
-  if suces_sra_te <= 40:
-    screen.blit(pygame.image.load(''))##################
-    pygame.display.update()
-  elif suces_sra_te <= 70:
-    screen.blit(pygame.image.load(''))##################
-    pygame.display.update()
-  elif suces_sra_te <= 100:
-    screen.blit(pygame.image.load(''))##################
-    pygame.display.update()
-  suces_sra_te = suces_sra_te / 100
-  global foreign_relations
-  government_wealth -= gftamt
-  foreign_relations += gftamt * suces_sra_te
-
-def deport_citizens():
-  global total_population
-  global decc_am
-  global government_wealth
-  numphrase = 'How much would you like to decrease your population by?'
-  decc_am = enter_number(government_wealth)
-  decc_am = float(decc_am)
-  sucessra_te = random.randint(15, 100)
-  sucessra_te = float(sucessra_te)
-  if sucessra_te <= 40:
-    screen.blit(pygame.image.load(''))##################
-    pygame.display.update()
-  elif sucessra_te <= 70:
-    screen.blit(pygame.image.load(''))##################
-    pygame.display.update()
-  elif sucessra_te <= 100:
-    screen.blit(pygame.image.load(''))##################
-    pygame.display.update()
-  sucessra_te = sucessra_te / 100
-
-  global food_resource
-  global population_happiness
-  government_wealth += decc_am * sucessra_te
-  food_resource += decc_am * sucessra_te
-  total_population -= decc_am
-  population_happiness -= decc_am * (1 - sucessra_te)
-
-
-def draft_citizens():
-  global total_population
-  global draft_count
-  numphrase = "How many citizens would you like to draft?"
-  draft_count = enter_number(total_population)
-  draft_count = float(draft_count)
-  sucessra_te = random.randint(15, 100)
-  sucessra_te = float(sucessra_te)
-  if sucessra_te <= 40:
-    screen.blit(pygame.image.load(''))##################
-    pygame.display.update()
-  elif sucessra_te <= 70:
-    screen.blit(pygame.image.load(''))##################
-    pygame.display.update()
-  elif sucessra_te <= 100:
-    screen.blit(pygame.image.load(''))##################
-    pygame.display.update()
-  sucessra_te = sucessra_te / 100
-  global population_happiness
-  global military_might
-  total_population -= draft_count
-  population_happiness -= draft_count * abs(1-sucessra_te)
-  military_might += draft_count
-
-def hold_festival():
-  global government_wealth
-  global spend_amount
-  numphrase = "How much would you like to spend?"
-  spend_amount = enter_number(government_wealth)
-  spend_amount = float(spend_amount)
-  sucessra_te = random.randint(15, 100)
-  sucessra_te = float(sucessra_te)
-  if sucessra_te <= 40:
-    screen.blit(pygame.image.load(''))##################
-    pygame.display.update()
-  elif sucessra_te <= 70:
-    screen.blit(pygame.image.load(''))##################
-    pygame.display.update()
-  elif sucessra_te <= 100:
-    screen.blit(pygame.image.load(''))##################
-    pygame.display.update()
-  sucessra_te = sucessra_te / 100
-  global population_happiness
-  population_happiness += spend_amount * sucessra_te
-  government_wealth -= spend_amount
-
-def increase_taxes():
-  global tax_amount
-  global total_population
-  numphrase = "What percent of the population would you like to tax?"
-  tax_amount = enter_number(total_population)
-  tax_amount = float(tax_amount)
-  sucessra_te = random.randint(15, 100)
-  sucessra_te = float(sucessra_te)
-  if sucessra_te <= 40:
-    screen.blit(pygame.image.load(''))##################
-    pygame.display.update()
-  elif sucessra_te <= 70:
-    screen.blit(pygame.image.load(''))##################
-    pygame.display.update()
-  elif sucessra_te <= 100:
-    screen.blit(pygame.image.load(''))##################
-    pygame.display.update()
-  sucessra_te = sucessra_te / 100
-  global government_wealth
-  global population_happiness
-  population_happiness -= (tax_amount * (1-sucessra_te))
-  government_wealth += (tax_amount * (float(total_population)/100))
-
-##############
-'End Fuctions'
-##############
-
-def choose_two(varone,vartwo):
-    numberkeycolors = [WHITE, WHITE]
-    number_value = [varone, vartwo]
-    number_positionsx = [50, 450]
-    number_positionsy = [50, 50]
-    number_positionsw = [350, 350]
-    number_positionsh = [700, 700]
-    numkeydone = False
-    pygame.draw.rect(screen, (100,100,100), (0,0,800,800))
-    while not numkeydone:
-        pygame.event.get()
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-               done = True
-               numkeydone = True
-        get_pos = pygame.mouse.get_pos()
-        for i in range(len(number_positionsx)):
-            numberkeycolors[i] = WHITE
-            mousesx, mousesy = get_pos
-            if (mousesx > (number_positionsx[i]) and  (mousesy > number_positionsy[i]) and (mousesx < (number_positionsx[i] + number_positionsw[i])) and (mousesy < number_positionsy[i] + number_positionsh[i])):
-                numberkeycolors[i] = BLACK
-        pygame.display.update()
-        for i in range(len(number_positionsx)):
-            if (numberkeycolors[i] == BLACK) and (pygame.mouse.get_pressed() == (True, False, False)):
-                return number_value[i]
-        #Display the Buttons
-        for i in range(len(number_positionsx)):
-            pygame.draw.rect(screen, numberkeycolors[i], (number_positionsx[i], number_positionsy[i], number_positionsw[i], number_positionsh[i]))
-        numfont = pygame.font.SysFont('Times New Roman', 80)
-        screen.blit(numfont.render(varone, False, (100, 100, 100)),(565,535))
-        screen.blit(numfont.render(vartwo, False, (100, 100, 100)),(365,735))
-        pygame.display.update()
-
-
-def dispnum():
-    global numphrase
-    global numberused
-    numfont = pygame.font.SysFont('Times New Roman', 80)
-    phrfont = pygame.font.SysFont('Times New Roman', 30)
-    num1 = numfont.render('1', False, (100, 100, 100)) #Text Here
-    num2 = numfont.render('2', False, (100, 100, 100))
-    num3 = numfont.render('3', False, (100, 100, 100))
-    num4 = numfont.render('4', False, (100, 100, 100))
-    num5 = numfont.render('5', False, (100, 100, 100))
-    num6 = numfont.render('6', False, (100, 100, 100))
-    num7 = numfont.render('7', False, (100, 100, 100))
-    num8 = numfont.render('8', False, (100, 100, 100))
-    num9 = numfont.render('9', False, (100, 100, 100))
-    num0 = numfont.render('0', False, (100, 100, 100))
-    enter = phrfont.render('Enter', False, (100, 100, 100))
-    current = phrfont.render(numberused, False, BLACK)
-    phraseused = phrfont.render(numphrase, False, WHITE)
-    screen.blit(num1,(165, 135))
-    screen.blit(num2,(365,135))
-    screen.blit(num3,(565,135))
-    screen.blit(num4,(165,335))
-    screen.blit(num5,(365,335))
-    screen.blit(num6,(565,335))
-    screen.blit(num7,(165,535))
-    screen.blit(num8,(365,535))
-    screen.blit(num9,(565,535))
-    screen.blit(num0,(365,735))
-    screen.blit(current, (640, 25))
-    screen.blit(phraseused, (25, 25))
-
-def runnums(pressed):
-    global numkeydone
-    global numberused
-    if pressed == 0:
-        numberused += "1"
-    if pressed == 1:
-        numberused += "4"
-    if pressed == 2:
-        numberused += "7"
-    if pressed == 3:
-        numberused += "2"
-    if pressed == 4:
-        numberused += "5"
-    if pressed == 5:
-        numberused += "8"
-    if pressed == 6:
-        numberused += "0"
-    if pressed == 7:
-        numberused += "3"
-    if pressed == 8:
-        numberused += "6"
-    if pressed == 9:
-        numberused += "9"
-    if pressed == 10:
-        numkeydone = True
-    print(numberused)
-    pygame.time.wait(250)
-    
-
-def enter_number(variable):
-    global numkeydone
-    global numberused
-    numberused = ""
-    numberkeycolors = [WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE]
-    number_positionsx = [100, 100, 100, 300, 300, 300, 300, 500, 500, 500, 500]
-    number_positionsy = [100, 300, 500, 100, 300, 500, 700, 100, 300, 500, 700]
-    number_positionsw = [175, 175, 175, 175, 175, 175, 175, 175, 175, 175, 175]
-    number_positionsh = [175, 175, 175, 175, 175, 175, 175, 175, 175, 175, 175]
-    numkeydone = False
-    pygame.draw.rect(screen, (100,100,100), (0,0,800,800))
-    #load number grid
-    while not numkeydone:
-        pygame.event.get()
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-               done = True
-               numkeydone = True
-        get_pos = pygame.mouse.get_pos()
-        for i in range(len(number_positionsx)):
-            numberkeycolors[i] = WHITE
-            mousesx, mousesy = get_pos
-            if (mousesx > (number_positionsx[i]) and  (mousesy > number_positionsy[i]) and (mousesx < (number_positionsx[i] + number_positionsw[i])) and (mousesy < number_positionsy[i] + number_positionsh[i])):
-                numberkeycolors[i] = BLACK
-        pygame.display.update()
-        for i in range(len(number_positionsx)):
-            if (numberkeycolors[i] == BLACK) and (pygame.mouse.get_pressed() == (True, False, False)):
-                runnums(i)
-        #Display the Buttons
-        for i in range(len(number_positionsx)):
-            pygame.draw.rect(screen, numberkeycolors[i], (number_positionsx[i], number_positionsy[i], number_positionsw[i], number_positionsh[i]))
-        dispnum()
-        pygame.display.update()
-    return numberused
+  option_choice()
 
 
 
 
 
-def runfxn(c):
-    if c == 0:
-        subsidize_farming()
-    if c == 1:
-        take_land()
-    if c == 2:
-        import_()
-    if c == 3:
-        export()
-    if c == 4:
-        take_over_country()
-    if c == 5:
-        increase_innovation()
-    if c == 6:
-        accept_immigrants()
-    if c == 7:
-        gift()
-    if c == 8:
-        deport_citizens()
-    if c == 9:
-        draft_citizes()
-    if c == 10:
-        hold_festival()
-    if c == 11:
-        increase_taxes()
-    pygame.time.wait(2000)
-    screen.blit(castle, (0,0))
-        
-        
-def dispfxn(fxnnum):
-    if fxnnum == 0:
-        print("yaya")
-        #Display fxn in info tab
 
-myfont = pygame.font.SysFont('Comic Sans MS', 30)
-#textsurface = myfont.render('Some Text', False, (0, 0, 0)) #Text Here
-#screen.blit(textsurface,(0,0))
-
-subfarmtext = myfont.render('Subsidise Farming', False, (0, 0, 0))
-
-fxn_texts = [subfarmtext]
-
-castle = pygame.image.load('C:/Users/tucke/Pictures/Castle Graphic.png')
-
-
-done = False
-pygame.draw.rect(screen, WHITE,(100,100,50,50))
-screen.blit(castle, (0,0))
-while not done:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-               done = True
-        #Cursor Sensing
-        pygame.event.get()
-        get_pos = pygame.mouse.get_pos()
-        for i in range(len(button_positionsx)):
-            button_colors[i] = RED2
-            mousex, mousey = get_pos
-            if (mousex > (button_positionsx[i]) and  (mousey > button_positionsy[i]) and (mousex < (button_positionsx[i] + button_positionsw[i])) and (mousey < button_positionsy[i] + button_positionsh[i])):
-                button_colors[i] = PINK
-                print("yay")
-                print(get_pos)
-
-        pygame.display.update()
-        
-        for i in range(len(button_positionsx)):
-            if (button_colors[i] == PINK) and (pygame.mouse.get_pressed() == (True, False, False)):
-                runfxn(i)
-            elif (button_colors[i] == PINK) and (pygame.mouse.get_pressed() == (False, False, False)):
-                dispfxn(i)
- 
-        #Display the Buttons
-        for i in range(len(button_positionsx)):
-            pygame.draw.rect(screen, button_colors[i], (button_positionsx[i], button_positionsy[i], button_positionsw[i], button_positionsh[i]))
- 
-        display_values()
- 
-pygame.quit()
-
-#Moving Logic
-#if event.type == pygame.KEYDOWN:
-    #if event.key == pygame.K_LEFT:
-        #player.changespeed(-5, 0)
-                
-
-
+def country_choice_spellcheck():
+  global mmcountry_1
+  global mmcountry_2
+  global mmcountry_3
+  global mmcountry_4
+  global country_choice
+  global country_used
+  testcasecountchoice = 0
   if not(country_choice == "1" or country_choice == "2" or country_choice == "3" or country_choice == "4"):
     print "Only type the integer, please."
     country_choice = raw_input("Type here: ")
